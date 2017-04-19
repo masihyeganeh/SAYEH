@@ -42,4 +42,4 @@ begin
         Cout               => Cout,
         Zout               => Zout
     );
-end behavioral ; -- behavioral
+end behavioral; -- behavioral

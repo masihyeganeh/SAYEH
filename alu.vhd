@@ -86,5 +86,5 @@ begin
             output <= "0000000000000000";
 
         end if;
-    end process ; -- ALU
-end RTL ; -- RTL
+    end process; -- ALU
+end RTL; -- RTL
