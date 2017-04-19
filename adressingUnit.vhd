@@ -1,38 +1,50 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 
-ENTITY AddressUnit IS
-    PORT (
-        Rside : IN std_logic_vector (15 DOWNTO 0);
-        Iside : IN std_logic_vector (7 DOWNTO 0);
-        Address : OUT std_logic_vector (15 DOWNTO 0);
-        clk, ResetPC, PCplusI, PCplus1 : IN std_logic;
-        R0plus1, R0plus0, EnablePC : IN std_logic
+entity AddressUnit is
+    port (
+        Rside   : in std_logic_vector (15 downto 0);
+        Iside   : in std_logic_vector (7 downto 0);
+        Address : out std_logic_vector (15 downto 0);
+        clk, EnablePC, ResetPC, PCplusI, PCplus1, RplusI, Rplus0 : in std_logic
     );
-END AddressUnit;
-ARCHITECTURE dataflow OF AddressUnit IS
-    COMPONENT PC  PORT (
-        EnablePC : IN std_logic;
-        input: IN std_logic_vector (15 DOWNTO 0);
-        clk : IN std_logic;
-        output: OUT std_logic_vector (15 DOWNTO 0)
+end AddressUnit;
+
+architecture dataflow of AddressUnit is
+    component PC port (
+        EnablePC : in std_logic;
+        input: in std_logic_vector (15 downto 0);
+        clk : in std_logic;
+        output: out std_logic_vector (15 downto 0)
     );
-   END COMPONENT;
+   end component;
 
-    COMPONENT AL port (
-        PCside, Rside : IN std_logic_vector (15 DOWNTO 0);
-        Iside : IN std_logic_vector (7 DOWNTO 0);
-        ALout : OUT std_logic_vector (15 DOWNTO 0);
-        ResetPC, PCplusI, PCplus1, R0plus1, R0plus0 : IN std_logic
-        ); END COMPONENT;
+   component AL port (
+        PCside, Rside : in std_logic_vector (15 downto 0);
+        Iside  : in std_logic_vector (7 downto 0);
+        ResetPC, PCplusI, PCplus1, RplusI : in std_logic := '0';
+        Rplus0 : in std_logic := '1';
+        ALout  : out std_logic_vector (15 downto 0)
+    );
+    end component;
 
+    signal PCout, AddressSignal : std_logic_vector (15 downto 0);
 
-    SIGNAL pcout : std_logic_vector (15 DOWNTO 0);
-    SIGNAL AddressSignal : std_logic_vector (15 DOWNTO 0);
-BEGIN
+begin
     Address <= AddressSignal;
-    l1 : PC PORT MAP (EnablePC, AddressSignal, clk, pcout);
-    l2 : AL PORT MAP
-        (pcout, Rside, Iside, AddressSignal,
-        ResetPC, PCplusI, PCplus1, R0plus1, R0plus0);
-END dataflow;
+
+    l1 : PC port map (
+        EnablePC, AddressSignal, clk, PCout
+    );
+
+    l2 : AL port map (
+        PCside  => PCout,
+        Rside   => Rside,
+        ResetPC => ResetPC,
+        PCplusI => PCplusI,
+        PCplus1 => PCplus1,
+        RplusI  => RplusI,
+        Rplus0  => Rplus0,
+        ALout   => AddressSignal
+    );
+end dataflow;
