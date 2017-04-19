@@ -13,9 +13,10 @@ entity ALU is
 end ALU;
 
 architecture RTL of ALU is
-    signal temp : std_logic_vector (16 downto 0); -- signals won't refresh until next clock?
 begin
     ALUProcess : process( destinationOperand, sourceOperand )
+        variable temp16bits : std_logic_vector (15 downto 0);
+        variable temp17bits : std_logic_vector (16 downto 0);
     begin
         Cout <= '0';
 
@@ -37,8 +38,8 @@ begin
 
         -- addition
         elsif AaddB = '1' then
-            temp <= std_logic_vector(signed('0' & destinationOperand) + signed('0' & sourceOperand)); -- add an extra bit to use 17 bits vector
-            if (temp(16) = '1') then
+            temp17bits := std_logic_vector(signed('0' & destinationOperand) + signed('0' & sourceOperand)); -- add an extra bit to use 17 bits vector
+            if (temp17bits(16) = '1') then
                 Cout <= '1';
                 output <= std_logic_vector(signed(destinationOperand) + signed(sourceOperand) + 1);
             else
@@ -58,8 +59,9 @@ begin
 
         -- comparison
         elsif AcmpB = '1' then
-            output <= std_logic_vector(signed(destinationOperand) - signed(sourceOperand));
-            if (std_logic_vector(signed(destinationOperand) - signed(sourceOperand)) = "0000000000000000") then
+            temp16bits := std_logic_vector(signed(destinationOperand) - signed(sourceOperand));
+            output <= temp16bits;
+            if (temp16bits = "0000000000000000") then
                 Zout <= '1';
             else
                 Zout <= '0';
