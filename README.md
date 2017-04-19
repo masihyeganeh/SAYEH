@@ -19,7 +19,7 @@ TODOs
 - - [ ] Save PC
 - - [ ] Jump Addressed
 - [ ] Testbenches should be implemented for:
-- - [ ] addressLogic
+- - [x] addressLogic
 - - [ ] addressingUnit
 - - [ ] controller
 - - [ ] datapath
