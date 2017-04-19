@@ -3,7 +3,7 @@ use IEEE.std_logic_1164.all;
 
 entity controller is
 	port (
-		readMem, writeMem, MemDataReady, -- memory 
+		ReadMem, WriteMem, MemDataReady, -- memory 
 		address_on_databus, -- databus
 		resetPc, PCplus1, PCplus0, R0plus1, R0plus0, -- pc
 		RFLwrite, RFHwrite, -- registerfile
@@ -40,8 +40,8 @@ begin
 		case current_state is
 			when fetch =>
 				next_state <= decode;
-				readMem <= '1';
-				writeMem <= '0';
+				ReadMem <= '1';
+				WriteMem <= '0';
 				IRload <= '1';
 				PCPlus1 <= '1';   
 
