@@ -19,6 +19,10 @@ begin
     begin
         Cout <= '0';
 
+        -- B
+        if B15downto0 = '1':
+            output  <= sourceOperand;
+
         -- and
         if AandB = '1' then
             output  <= (destinationOperand and sourceOperand);
