@@ -4,72 +4,69 @@ use IEEE.numeric_std.all;
 
 entity ALU is
     port (
-        AandB, AorB, notB, shlB, shrB, AaddB, AsubB, AcmpB : in std_logic := '0';
-        SRCout, SRZin, SRCin : out std_logic := '0';
-        ALUout, OpndBus    : in  std_logic_vector (15 downto 0) := "0000000000000000";
-        operand1   : in  std_logic_vector (15 downto 0) := "0000000000000000";
-        operand2   : in  std_logic_vector (15 downto 0) := "0000000000000000";
-        output     : out std_logic_vector (15 downto 0) := "0000000000000000";
-        carry      : out std_logic := '0';
-        zero       : out std_logic := '0'
+        B15downto0, AandB, AorB, notB, AaddB, AsubB, AcmpB, shlB, shrB : in std_logic := '0'; -- Operation
+        Zin, Cin : in std_logic := '0'; -- Inputs from flags register
+        destinationOperand, sourceOperand : in std_logic_vector (15 downto 0) := "0000000000000000"; -- Operands
+        output : out std_logic_vector (15 downto 0) := "0000000000000000";  -- Output
+        Cout, Zout : out std_logic := '0' -- Outputs to flags register
     );
 end ALU;
 
 architecture RTL of ALU is
     signal temp : std_logic_vector (16 downto 0); -- signals won't refresh until next clock?
 begin
-    ALUProcess : process( operand1, operand2 )
+    ALUProcess : process( destinationOperand, sourceOperand )
     begin
-        carry <= '0';
+        Cout <= '0';
 
         -- and
         if AandB = '1' then
-            output  <= (operand1 and operand2);
+            output  <= (destinationOperand and sourceOperand);
 
         -- or
         elsif AorB = '1' then
-                output  <= (operand1 or operand2);
+                output  <= (destinationOperand or sourceOperand);
 
         -- shift left
         elsif shlB = '1' then
-            output  <= std_logic_vector(unsigned(operand1) sll to_integer(unsigned(operand2)));
+            output  <= std_logic_vector(unsigned(destinationOperand) sll to_integer(unsigned(sourceOperand)));
 
         -- shift right
         elsif shrB = '1' then
-                output  <= std_logic_vector(unsigned(operand1) srl to_integer(unsigned(operand2)));
+                output  <= std_logic_vector(unsigned(destinationOperand) srl to_integer(unsigned(sourceOperand)));
 
         -- addition
         elsif AaddB = '1' then
-            temp   <= std_logic_vector(signed('0' & operand1) + signed('0' & operand2)); -- add an extra bit to use 17 bits vector
+            temp   <= std_logic_vector(signed('0' & destinationOperand) + signed('0' & sourceOperand)); -- add an extra bit to use 17 bits vector
             if (temp(16) = '1') then
-                carry <= '1';
-                output <= std_logic_vector(signed(operand1) + signed(operand2) + 1);
+                Cout <= '1';
+                output <= std_logic_vector(signed(destinationOperand) + signed(sourceOperand) + 1);
             else
-                carry <= '0';
-                output <= std_logic_vector(signed(operand1) + signed(operand2));
+                Cout <= '0';
+                output <= std_logic_vector(signed(destinationOperand) + signed(sourceOperand));
             end if;
 
         -- subtraction
         elsif AsubB = '1' then
-        if (signed(operand1) < signed(operand2)) then
-                carry  <= '1';
-                output <= std_logic_vector(signed(operand1) - signed(operand2) - 1);
+        if (signed(destinationOperand) < signed(sourceOperand)) then
+                Cout  <= '1';
+                output <= std_logic_vector(signed(destinationOperand) - signed(sourceOperand) - 1);
             else
-                carry  <= '0';
-                output <= std_logic_vector(signed(operand1) - signed(operand2));
+                Cout  <= '0';
+                output <= std_logic_vector(signed(destinationOperand) - signed(sourceOperand));
             end if;
         -- comparison
         elsif AcmpB = '1' then 
-            output <= std_logic_vector(signed(operand1) - signed(operand2));
-            if (std_logic_vector(signed(operand1) - signed(operand2)) = "0000000000000000") then
-                zero <= '1';
+            output <= std_logic_vector(signed(destinationOperand) - signed(sourceOperand));
+            if (std_logic_vector(signed(destinationOperand) - signed(sourceOperand)) = "0000000000000000") then
+                Zout <= '1';
             else
-                zero <= '0';
+                Zout <= '0';
             end if;
-            if (signed(operand1) < signed(operand2)) then
-                carry <= '1';
+            if (signed(destinationOperand) < signed(sourceOperand)) then
+                Cout <= '1';
             else
-                carry <= '0';
+                Cout <= '0';
             end if;
         
         -- others
