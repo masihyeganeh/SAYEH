@@ -44,9 +44,9 @@ begin
 				writeMem <= '0';
 				IRload <= '1';
 				PCPlus1 <= '1';   
-			
+
 			when decode =>
-				next_state   <= effectiveAddress;
+				next_state <= effectiveAddress;
 				-- TODO: these bits should be cleared here or what?
 		        B15to0       <= '0';
 				AandB        <= '0';
@@ -58,8 +58,8 @@ begin
 				shrB         <= '0';
 				shlB         <= '0';
 				no_operation <= '0';
-				
-				case ( IR(15 downto 12) ) is
+
+				case ( IR (15 downto 12) ) is
 					when "0110" => AandB <= '1'; -- and
 					when "0111" => AorB  <= '1'; -- or
 					when "1001" => shlB  <= '1'; -- shift left
@@ -68,7 +68,7 @@ begin
 					when "1100" => AsubB <= '1'; -- subtraction
 					when "1110" => AcmpB <= '1'; -- comparison
 					when "0000" =>
-						case( IR(11 downto 8) ) is
+						case( IR (11 downto 8) ) is
 							when "0000" => no_operation <= '1';  -- No Operation
 							when "0001" => next_state   <= halt; -- Halt
 							when "0010" => Zset         <= '1';  -- Set zero flag
@@ -81,21 +81,20 @@ begin
 					when others =>
 				end case ;
 
-
 			when effectiveAddress =>
 				if no_operation = '0' then
 					-- TODO: Implement effectiveAddress here
 					-- fetch data from memory address if source is refering to memory or do nothing
 				end if ;
 				next_state <= execute;
-			
+
 			when execute =>
 				if no_operation = '0' then
 					-- TODO: Implement execute here
 					-- pass operands to alu and let it do the calculation
 				end if ;
 				next_state <= writeBack;
-		
+
 			when writeBack =>
 				if no_operation = '0' then
 					-- TODO: Implement writeBack here

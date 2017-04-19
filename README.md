@@ -9,3 +9,4 @@ TODOs
 
 - [ ] Zin & Cin in ALU are not used
 - [ ] Main component should be implemented
+- [ ] Implement effectiveAddress, execute and writeBack states for controller
