@@ -28,12 +28,12 @@ begin
             output  <= (destinationOperand and sourceOperand);
 
         -- or
-        elsif notB = '1' then
-                output  <= not sourceOperand;
-
-        -- not
         elsif AorB = '1' then
                 output  <= (destinationOperand or sourceOperand);
+
+        -- not
+        elsif notB = '1' then
+                output  <= not sourceOperand;
 
         -- shift left
         elsif shlB = '1' then
