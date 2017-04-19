@@ -2,12 +2,12 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity testalu is
-end testalu;
+entity testir is
+end testir;
 
-architecture behavioral of testalu is
+architecture behavioral of testir is
 
-    component alu
+    component ir
         port (
             clk     : in std_logic;
             IRload  : in std_logic;
@@ -22,7 +22,7 @@ architecture behavioral of testalu is
     signal IRout   : std_logic_vector (15 downto 0);
 
 begin
-    myAlu : alu port map (
+    myIr : ir port map (
         clk     => clk,
         IRload  => IRload,
         dataBus => dataBus,

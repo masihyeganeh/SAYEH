@@ -15,8 +15,8 @@ TODOs
 - - [ ] addressingUnit
 - - [ ] controller
 - - [ ] datapath
-- - [ ] flags
-- - [X] IR
+- - [x] flags
+- - [x] IR
 - - [ ] memory
 - - [x] PC
 - - [ ] registerFile
