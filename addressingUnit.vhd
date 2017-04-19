@@ -42,11 +42,12 @@ begin
     l2 : AL port map (
         PCside  => PCout,
         Rside   => Rside,
+        Iside   => Iside,
         ResetPC => ResetPC,
         PCplusI => PCplusI,
         PCplus1 => PCplus1,
-        R0plusI  => R0plusI,
-        R0plus0  => R0plus0,
+        R0plusI => R0plusI,
+        R0plus0 => R0plus0,
         ALout   => AddressSignal
     );
 end dataflow;
