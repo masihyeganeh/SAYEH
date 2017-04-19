@@ -6,11 +6,11 @@ entity datapath is
 		clk : in std_logic;
 		ResetPC, PCplusI, PCplus1, R0plus1, R0plus0,
 		Rs_on_AddressUnit, Rd_on_AddressUnit, EnablePC,
- 		RFLwrite, RFHwrite, WPreset, WPadd, IRload, SRIoad,
+ 		RFLwrite, RFHwrite, WPreset, WPadd, IRload, SRIoad, B15to0,
 		Address_on_Databus, ALU_on_Databus, IR_on_LOpndBus, IR_on_HOpndBus, RFright_on_OpndBus,
 		Cset, Creset, Zset, Zreset, Zin, Cin, Shadow : in std_logic;
 		register_in : in std_logic_vector (3 downto 0);
-	 	RSide, B15to0 : in std_logic_vector (15 downto 0);
+	 	RSide : in std_logic_vector (15 downto 0);
 		ISide : in std_logic_vector (7 DOWNTO 0);
 		Addressbus, Instruction : out std_logic_vector (15 downto 0);
 		register_out, Cout, Zout : out std_logic);
@@ -35,15 +35,11 @@ architecture rtl of datapath is
 
 	component alu is
 	Port(
-		AandB, AorB, notB, shlB, shrB, AaddB, AsubB, AcmpB : in std_logic;
-		ALUout : out std_logic_vector (15 downto 0);
-		SRCout, SRZin, SRCin : out std_logic;
-		OpndBus : out std_logic_vector (15 downto 0);		
-	    operand1   : in  std_logic_vector (15 downto 0); 
-        operand2   : in  std_logic_vector (15 downto 0); 
-        output     : out std_logic_vector (15 downto 0); 
-        carry      : out std_logic;
-        zero       : out std_logic
+		B15downto0, AandB, AorB, notB, AaddB, AsubB, AcmpB, shlB, shrB : in std_logic;
+        Zin, Cin : in std_logic;
+        destinationOperand, sourceOperand : in std_logic_vector (15 downto 0);
+        output : out std_logic_vector (15 downto 0);
+        Cout, Zout : out std_logic
     );
 	end component;
 
@@ -95,7 +91,7 @@ architecture rtl of datapath is
   	);
 	end component;
 
-	signal AandB, AorB, notB, shlB, shrB, AaddB, AsubB, AcmpB : std_logic;
+	signal B15downto0, AandB, AorB, notB, shlB, shrB, AaddB, AsubB, AcmpB : std_logic;
 	signal SRCin, SRZin, SRZout, SRCout : std_logic;
 	signal Right, Left, OpndBus, ALUout, Address, AddressUnitRSideBus, Databus, IRout : std_logic_vector(15 downto 0);
 	signal WPout : std_logic_vector(5 downto 0);
@@ -104,7 +100,24 @@ architecture rtl of datapath is
 begin
 	GPR : fourRegister port map (register_in, clk, register_load, register_shift, register_out);
     AU  : addressingUnit port map (Rside, Iside, Address, clk, ResetPC, PCplusI, PCplus1, R0plus1, R0plus0, EnablePC);
-	AL  : alu port map (AandB, AorB, notB, shlB, shrB, AaddB, AsubB, AcmpB, ALUout, SRCout, SRZin, SRCin, OpndBus, operand1 => Left, operand2 =>B15to0);
+	AL  : alu port map (
+		B15downto0         => B15downto0,
+        AandB              => AandB,
+        AorB               => AorB,
+        notB               => notB,
+        AaddB              => AaddB,
+        AsubB              => AsubB,
+        AcmpB              => AcmpB,
+        shlB               => shlB,
+        shrB               => shrB,
+        Zin                => Zin,
+        Cin                => Cin,
+        destinationOperand => Left,
+        sourceOperand      => Right,
+        output             => ALUout,
+        Cout               => Cout,
+        Zout               => Zout
+	);
 	RF  : registerFile port map (Databus, clk, Laddr, Raddr, WPout, RFLwrite, RFHwrite, Left, Right); 
 	instrunctionreg : IR port map (clk, IRload, Databus, IRout);
 	SR  : flags  port map(clk, Cset, Creset, Zset, Zreset, Zin, Cin, Zout, Cout);
