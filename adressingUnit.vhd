@@ -6,7 +6,7 @@ entity AddressUnit is
         Rside   : in std_logic_vector (15 downto 0);
         Iside   : in std_logic_vector (7 downto 0);
         Address : out std_logic_vector (15 downto 0);
-        clk, EnablePC, ResetPC, PCplusI, PCplus1, RplusI, Rplus0 : in std_logic
+        clk, EnablePC, ResetPC, PCplusI, PCplus1, R0plusI, R0plus0 : in std_logic
     );
 end AddressUnit;
 
@@ -22,8 +22,8 @@ architecture dataflow of AddressUnit is
    component AL port (
         PCside, Rside : in std_logic_vector (15 downto 0);
         Iside  : in std_logic_vector (7 downto 0);
-        ResetPC, PCplusI, PCplus1, RplusI : in std_logic := '0';
-        Rplus0 : in std_logic := '1';
+        ResetPC, PCplusI, PCplus1, R0plusI : in std_logic := '0';
+        R0plus0 : in std_logic := '1';
         ALout  : out std_logic_vector (15 downto 0)
     );
     end component;
@@ -43,8 +43,8 @@ begin
         ResetPC => ResetPC,
         PCplusI => PCplusI,
         PCplus1 => PCplus1,
-        RplusI  => RplusI,
-        Rplus0  => Rplus0,
+        R0plusI  => R0plusI,
+        R0plus0  => R0plus0,
         ALout   => AddressSignal
     );
 end dataflow;
