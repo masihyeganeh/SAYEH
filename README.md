@@ -2,5 +2,9 @@
 
 SAYEH basic computer implementation in VHDL.
 
-##TODOs:
+
+
+TODOs
+-----
+
 - [ ] Zin & Cin in ALU are not used
