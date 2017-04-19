@@ -12,10 +12,9 @@ end AddressUnit;
 
 architecture dataflow of AddressUnit is
     component PC port (
-        EnablePC : in std_logic;
-        input: in std_logic_vector (15 downto 0);
-        clk : in std_logic;
-        output: out std_logic_vector (15 downto 0)
+        clk, EnablePC : in std_logic;
+        input  : in std_logic_vector (15 downto 0);
+        output : out std_logic_vector (15 downto 0):= "0000000000000000"
     );
    end component;
 
@@ -34,7 +33,10 @@ begin
     Address <= AddressSignal;
 
     l1 : PC port map (
-        EnablePC, AddressSignal, clk, PCout
+        clk      => clk,
+        EnablePC => EnablePC,
+        input    => AddressSignal,
+        output   => PCout
     );
 
     l2 : AL port map (
