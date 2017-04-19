@@ -16,7 +16,7 @@ TODOs
 - - [ ] controller
 - - [ ] datapath
 - - [ ] flags
-- - [ ] IR
+- - [X] IR
 - - [ ] memory
 - - [x] PC
 - - [ ] registerFile
