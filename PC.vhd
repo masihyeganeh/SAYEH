@@ -5,7 +5,7 @@ entity ProgramCounter is
     port (
         clk, EnablePC : in std_logic;
         input  : in std_logic_vector (15 downto 0);
-        output : out std_logic_vector (15 downto 0):= "0000000000000000"
+        output : out std_logic_vector (15 downto 0) := "0000000000000000"
     );
 end ProgramCounter;
 

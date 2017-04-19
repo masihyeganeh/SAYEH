@@ -18,7 +18,7 @@ TODOs
 - - [ ] flags
 - - [ ] IR
 - - [ ] memory
-- - [ ] PC
+- - [x] PC
 - - [ ] registerFile
 - - [ ] WP
 - [ ] What is fourRegister?
