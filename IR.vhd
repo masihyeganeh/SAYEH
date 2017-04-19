@@ -20,7 +20,7 @@ begin
             if IRload = '1' then
                 data <= databus;
             else
-                Rout <= data;
+                IRout <= data;
             end if;
         end if;
  end process; -- IR
