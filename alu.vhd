@@ -21,31 +21,23 @@ begin
 
         -- B
         if B15downto0 = '1' then
-            output  <= sourceOperand;
+            output <= sourceOperand;
 
         -- and
         elsif AandB = '1' then
-            output  <= (destinationOperand and sourceOperand);
+            output <= (destinationOperand and sourceOperand);
 
         -- or
         elsif AorB = '1' then
-                output  <= (destinationOperand or sourceOperand);
+            output <= (destinationOperand or sourceOperand);
 
         -- not
         elsif notB = '1' then
-                output  <= not sourceOperand;
-
-        -- shift left
-        elsif shlB = '1' then
-            output  <= std_logic_vector(unsigned(sourceOperand) sll to_integer(unsigned(destinationOperand)));
-
-        -- shift right
-        elsif shrB = '1' then
-                output  <= std_logic_vector(unsigned(sourceOperand) srl to_integer(unsigned(destinationOperand)));
+            output <= not sourceOperand;
 
         -- addition
         elsif AaddB = '1' then
-            temp   <= std_logic_vector(signed('0' & destinationOperand) + signed('0' & sourceOperand)); -- add an extra bit to use 17 bits vector
+            temp <= std_logic_vector(signed('0' & destinationOperand) + signed('0' & sourceOperand)); -- add an extra bit to use 17 bits vector
             if (temp(16) = '1') then
                 Cout <= '1';
                 output <= std_logic_vector(signed(destinationOperand) + signed(sourceOperand) + 1);
@@ -56,33 +48,41 @@ begin
 
         -- subtraction
         elsif AsubB = '1' then
-        if (signed(destinationOperand) < signed(sourceOperand)) then
-                Cout  <= '1';
+            if (signed(destinationOperand) < signed(sourceOperand)) then
+                Cout <= '1';
                 output <= std_logic_vector(signed(destinationOperand) - signed(sourceOperand) - 1);
             else
-                Cout  <= '0';
+                Cout <= '0';
                 output <= std_logic_vector(signed(destinationOperand) - signed(sourceOperand));
             end if;
+
         -- comparison
-        elsif AcmpB = '1' then 
+        elsif AcmpB = '1' then
             output <= std_logic_vector(signed(destinationOperand) - signed(sourceOperand));
             if (std_logic_vector(signed(destinationOperand) - signed(sourceOperand)) = "0000000000000000") then
                 Zout <= '1';
             else
                 Zout <= '0';
             end if;
+
             if (signed(destinationOperand) < signed(sourceOperand)) then
                 Cout <= '1';
             else
                 Cout <= '0';
             end if;
-        
+
+        -- shift left
+        elsif shlB = '1' then
+            output <= std_logic_vector(unsigned(sourceOperand) sll to_integer(unsigned(destinationOperand)));
+
+        -- shift right
+        elsif shrB = '1' then
+            output <= std_logic_vector(unsigned(sourceOperand) srl to_integer(unsigned(destinationOperand)));
+
         -- others
-        else output   <= "0000000000000000";
-        
+        else
+            output <= "0000000000000000";
+
         end if;
-
-
     end process ; -- ALU
-
 end RTL ; -- RTL
