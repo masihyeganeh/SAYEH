@@ -14,3 +14,7 @@ $RECYCLE.BIN/
 
 # Visual Studio Code stuffs
 .vscode/
+
+# Compiled files
+*.o
+work-obj93.cf
