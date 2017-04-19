@@ -2,29 +2,30 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-ENTITY AddressLogic IS
-    PORT (
-        PCside, Rside : IN std_logic_vector (15 DOWNTO 0);
-        Iside : IN std_logic_vector (7 DOWNTO 0);
-        ALout : OUT std_logic_vector (15 DOWNTO 0);
-        ResetPC, PCplusI, PCplus1, RplusI : IN std_logic := '0';
-        Rplus0 : IN std_logic := '1'
+entity AddressLogic is
+    port (
+        PCside, Rside : in std_logic_vector (15 downto 0);
+        ResetPC, PCplusI, PCplus1, RplusI : in std_logic := '0';
+        Rplus0 : in std_logic := '1';
+        Iside  : in std_logic_vector (7 downto 0);
+        ALout  : out std_logic_vector (15 downto 0)
     );
-END AddressLogic;
-ARCHITECTURE dataflow of AddressLogic IS
-BEGIN
-    PROCESS (PCside, Rside, Iside, ResetPC,
+end AddressLogic;
+
+architecture dataflow of AddressLogic is
+begin
+    process (PCside, Rside, Iside, ResetPC,
             PCplusI, PCplus1, RplusI, Rplus0)
-        VARIABLE temp : std_logic_vector (4 DOWNTO 0);
-BEGIN
+        variable temp : std_logic_vector (4 downto 0);
+begin
         temp := (ResetPC & PCplusI & PCplus1 & RplusI & Rplus0);
-        CASE temp IS
-            WHEN "10000" => ALout <= (OTHERS => '0');
-            WHEN "01000" => ALout <= std_logic_vector(unsigned(PCside) + unsigned(Iside));
-            WHEN "00100" => ALout <= std_logic_vector(unsigned(PCside) + 1);
-            WHEN "00010" => ALout <= std_logic_vector(unsigned(Rside) + unsigned(Iside));
-            WHEN "00001" => ALout <= Rside;
-            WHEN OTHERS => ALout <= PCside;
-        END CASE;
-    END PROCESS;
-END dataflow;
+        case temp is
+            when "10000" => ALout <= (others => '0');
+            when "01000" => ALout <= std_logic_vector(unsigned(PCside) + unsigned(Iside));
+            when "00100" => ALout <= std_logic_vector(unsigned(PCside) + 1);
+            when "00010" => ALout <= std_logic_vector(unsigned(Rside) + unsigned(Iside));
+            when "00001" => ALout <= Rside;
+            when others  => ALout <= PCside;
+        end case;
+    end process;
+end dataflow;
