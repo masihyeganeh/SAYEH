@@ -8,3 +8,4 @@ TODOs
 -----
 
 - [ ] Zin & Cin in ALU are not used
+- [ ] Main component should be implemented
