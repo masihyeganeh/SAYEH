@@ -9,29 +9,37 @@ architecture behavioral of testalu is
 
     component alu
         port (
-            AandB, AorB, notB, shlB, shrB, AaddB, AsubB, AcmpB : in std_logic;
-            operand1   : in  std_logic_vector (15 downto 0);
-            operand2   : in  std_logic_vector (15 downto 0);
-            output     : out std_logic_vector (15 downto 0);
-            carry      : out std_logic;
-            zero       : out std_logic
+            B15downto0, AandB, AorB, notB, AaddB, AsubB, AcmpB, shlB, shrB : in std_logic;
+            Zin, Cin : in std_logic;
+            destinationOperand, sourceOperand : in std_logic_vector (15 downto 0);
+            output : out std_logic_vector (15 downto 0);
+            Cout, Zout : out std_logic
         );
     end component;
 
-    signal AandB, AorB, notB, shlB, shrB, AaddB, AsubB, AcmpB : std_logic := '0';
-    signal operand1   :  std_logic_vector (15 downto 0) := "0000100000100010";
-    signal operand2   :  std_logic_vector (15 downto 0) := "1110011111111111";
-    signal output     :  std_logic_vector (15 downto 0) := "0000000000000000";
-    signal carry      :  std_logic := '0';
-    signal zero       :  std_logic := '0';
+    signal B15downto0, AandB, AorB, notB, AaddB, AsubB, AcmpB, shlB, shrB : std_logic := '0';
+    signal Zin, Cin : std_logic := '0';
+    signal destinationOperand, sourceOperand : std_logic_vector (15 downto 0) := "0000000000000000";
+    signal output : std_logic_vector (15 downto 0) := "0000000000000000"; 
+    signal Cout, Zout : std_logic := '0';
 
 begin
     myAlu : alu port map (
-        AandB, AorB, notB, shlB, shrB, AaddB, AsubB, AcmpB,
-        operand1   => operand1,
-        operand2   => operand2,
-        output     => output,
-        carry      => carry,
-        zero       => zero
+        B15downto0         => B15downto0,
+        AandB              => AandB,
+        AorB               => AorB,
+        notB               => notB,
+        AaddB              => AaddB,
+        AsubB              => AsubB,
+        AcmpB              => AcmpB,
+        shlB               => shlB,
+        shrB               => shrB,
+        Zin                => Zin,
+        Cin                => Cin,
+        destinationOperand => destinationOperand,
+        sourceOperand      => sourceOperand,
+        output             => output,
+        Cout               => Cout,
+        Zout               => Zout
     );
 end behavioral ; -- behavioral
