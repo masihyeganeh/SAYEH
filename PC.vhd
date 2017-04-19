@@ -1,21 +1,22 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 
-
-ENTITY ProgramCounter IS
-    PORT (
-        EnablePC : IN std_logic;
-        input: IN std_logic_vector (15 DOWNTO 0);
-        clk : IN std_logic;
-        output: OUT std_logic_vector (15 DOWNTO 0):= "0000000000000000"
+entity ProgramCounter is
+    port (
+        clk, EnablePC : in std_logic;
+        input  : in std_logic_vector (15 downto 0);
+        output : out std_logic_vector (15 downto 0):= "0000000000000000"
     );
-END ProgramCounter;
-ARCHITECTURE dataflow OF ProgramCounter IS BEGIN
-    PROCESS (clk) BEGIN
-        IF (clk'Event and clk = '1') THEN
-            IF (EnablePC = '1') THEN
+end ProgramCounter;
+
+architecture dataflow of ProgramCounter is
+begin
+    process (clk)
+    begin
+        if (clk'Event and clk = '1') then
+            if (EnablePC = '1') then
                 output <= input;
-            END IF;
-        END IF;
-    END PROCESS;
-END dataflow;
+            end if;
+        end if;
+    end process;
+end dataflow;
