@@ -3,10 +3,10 @@ use IEEE.std_logic_1164.all;
 
 entity AddressUnit is
     port (
+        clk, EnablePC, ResetPC, PCplusI, PCplus1, R0plusI, R0plus0 : in std_logic;
         Rside   : in std_logic_vector (15 downto 0);
         Iside   : in std_logic_vector (7 downto 0);
-        Address : out std_logic_vector (15 downto 0);
-        clk, EnablePC, ResetPC, PCplusI, PCplus1, R0plusI, R0plus0 : in std_logic
+        Address : out std_logic_vector (15 downto 0)
     );
 end AddressUnit;
 
