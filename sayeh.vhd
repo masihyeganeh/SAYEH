@@ -22,7 +22,7 @@ use IEEE.std_logic_1164.all;
 		Address_on_Databus, ALU_on_Databus, IR_on_LOpndBus, IR_on_HOpndBus, RFright_on_OpndBus,
 		Cset, Creset, Zset, Zreset, Zin, Cin, Shadow : in std_logic;
 		register_in : in std_logic_vector (3 downto 0);
-	 	RSide, B15to0 : in std_logic_vector (15 downto 0);
+	 	RSide : in std_logic_vector (15 downto 0);
 		ISide : in std_logic_vector (7 DOWNTO 0);
 		Addressbus, Instruction : out std_logic_vector (15 downto 0);
 		register_out, Cout, Zout : out std_logic
@@ -98,7 +98,7 @@ use IEEE.std_logic_1164.all;
         register_in => register_in,  
 		register_out => register_out,
         Cout => Cout, 
-        Zout => Zout 
+        Zout => Zout
     );
 
     ctrller : ctrl port map (
