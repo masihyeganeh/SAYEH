@@ -33,11 +33,11 @@ begin
 
         -- shift left
         elsif shlB = '1' then
-            output  <= std_logic_vector(unsigned(destinationOperand) sll to_integer(unsigned(sourceOperand)));
+            output  <= std_logic_vector(unsigned(sourceOperand) sll to_integer(unsigned(destinationOperand)));
 
         -- shift right
         elsif shrB = '1' then
-                output  <= std_logic_vector(unsigned(destinationOperand) srl to_integer(unsigned(sourceOperand)));
+                output  <= std_logic_vector(unsigned(sourceOperand) srl to_integer(unsigned(destinationOperand)));
 
         -- addition
         elsif AaddB = '1' then
