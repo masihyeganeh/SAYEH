@@ -25,7 +25,7 @@ TODOs
 - - [ ] datapath
 - - [x] flags
 - - [x] IR
-- - [ ] memory
+- - [x] memory
 - - [x] PC
 - - [ ] registerFile
 - - [ ] WP
