@@ -28,5 +28,5 @@ TODOs
 - - [x] memory
 - - [x] PC
 - - [x] registerFile
-- - [ ] WP
+- - [x] WP
 - [ ] What is fourRegister?
