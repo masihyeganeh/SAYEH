@@ -20,14 +20,18 @@ begin
         Cout <= '0';
 
         -- B
-        if B15downto0 = '1':
+        if B15downto0 = '1' then
             output  <= sourceOperand;
 
         -- and
-        if AandB = '1' then
+        elsif AandB = '1' then
             output  <= (destinationOperand and sourceOperand);
 
         -- or
+        elsif notB = '1' then
+                output  <= not sourceOperand;
+
+        -- not
         elsif AorB = '1' then
                 output  <= (destinationOperand or sourceOperand);
 
