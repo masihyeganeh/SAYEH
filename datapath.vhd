@@ -2,7 +2,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 
 entity datapath is
-	port (register_load, register_shift : in std_logic;
+	port (
 		clk : in std_logic;
 		ResetPC, PCplusI, PCplus1, R0plusI, R0plus0,
 		Rs_on_AddressUnit, Rd_on_AddressUnit, EnablePC,
@@ -13,7 +13,8 @@ entity datapath is
 	 	RSide : in std_logic_vector (15 downto 0);
 		ISide : in std_logic_vector (7 DOWNTO 0);
 		Addressbus, Instruction : out std_logic_vector (15 downto 0);
-		register_out, Cout, Zout : out std_logic);
+		register_out, Cout, Zout : out std_logic
+	);
 end datapath;
 
 architecture rtl of datapath is
@@ -47,8 +48,7 @@ architecture rtl of datapath is
 	port(
 		input : in std_logic_vector(15 downto 0);
 		clk : in std_logic;
-		Daddr : in std_logic_vector(1 downto 0);
-		Saddr : in std_logic_vector(1 downto 0);
+		addr : in std_logic_vector(3 downto 0);
 		WP : in std_logic_vector(5 downto 0);
 		RFLWrite :in std_logic;
 		RFHWrite : in std_logic;
@@ -62,7 +62,7 @@ architecture rtl of datapath is
 		clk : in std_logic;
 		IRload : in std_logic;
 		dataBus : in std_logic_vector(15 downto 0);
-		IRout : out std_logic_vector (15 downto 0)
+		WPin : out std_logic_vector (5 downto 0)
  	);
 	end component;
 
@@ -73,7 +73,7 @@ architecture rtl of datapath is
 		Creset : in  std_logic;
 		Zset   : in  std_logic;
 		Zreset : in  std_logic;
-		--SRload : in  std_logic; -- kill yourself
+		--SRload : in  std_logic; -- kys
 		Zin    : in  std_logic;
 		Cin    : in  std_logic;
 		Zout   : out std_logic;
@@ -83,7 +83,7 @@ architecture rtl of datapath is
 
 	component WP is
 	port (
-      IRout : in std_logic_vector(4 downto 0);
+      WPin : in std_logic_vector(5 downto 0);
 	  clk : in std_logic;
 	  WPreset : in std_logic;      
       WPadd : in std_logic;
@@ -92,13 +92,12 @@ architecture rtl of datapath is
 	end component;
 
 	signal B15downto0, AandB, AorB, notB, shlB, shrB, AaddB, AsubB, AcmpB : std_logic;
-	signal SRCin, SRZin, SRZout, SRCout : std_logic;
-	signal Right, Left, OpndBus, ALUout, Address, AddressUnitRSideBus, Databus, IRout : std_logic_vector(15 downto 0);
-	signal WPout : std_logic_vector(5 downto 0);
-	signal Laddr, Raddr : std_logic_vector(1 downto 0);
+	signal Right, Left, OpndBus, ALUout, Address, AddressUnitRSideBus, Databus : std_logic_vector(15 downto 0);
+	signal WPout, WPin : std_logic_vector(5 downto 0);
+	signal registeraddr : std_logic_vector(3 downto 0);
 
 begin
-	GPR : fourRegister port map (register_in, clk, register_load, register_shift, register_out);
+	--GPR : fourRegister port map (register_in, clk, register_out);
     AU  : addressingUnit port map (Rside, Iside, Address, clk, ResetPC, PCplusI, PCplus1, R0plusI, R0plus0, EnablePC);
 	AL  : alu port map (
 		B15downto0         => B15downto0,
@@ -118,8 +117,9 @@ begin
         Cout               => Cout,
         Zout               => Zout
 	);
-	RF  : registerFile port map (Databus, clk, Laddr, Raddr, WPout, RFLwrite, RFHwrite, Left, Right); 
-	instrunctionreg : IR port map (clk, IRload, Databus, IRout);
-	SR  : flags  port map(clk, Cset, Creset, Zset, Zreset, Zin, Cin, Zout, Cout);
-	WindowPointer : WP port map (IRout(4 downto 0), clk, WPreset, WPadd, WPout);
+
+	RF  : registerFile port map (Databus, clk, registeraddr, WPout, RFLwrite, RFHwrite, Left, Right); 
+	instrunctionreg : IR port map (clk, IRload, Databus, WPin);
+	SR  : flags port map(clk, Cset, Creset, Zset, Zreset, Zin, Cin, Zout, Cout);
+	WindowPointer : WP port map (WPin, clk, WPreset, WPadd, WPout);
 end architecture;
