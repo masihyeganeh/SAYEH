@@ -20,7 +20,6 @@ use IEEE.std_logic_1164.all;
  		RFLwrite, RFHwrite, WPreset, WPadd, IRload, SRIoad,
 		Address_on_Databus, ALUout_on_Databus, IR_on_LOpndBus, IR_on_HOpndBus, RFright_on_OpndBus,
 		Cset, Creset, Zset, Zreset, Zin, Cin, Shadow : in std_logic :='0';
-		EnablePC : in std_logic := '1';
 	 	Addressbus : out std_logic_vector (15 downto 0);
     Databus : inout std_logic_vector (15 downto 0)
     );
@@ -45,7 +44,7 @@ use IEEE.std_logic_1164.all;
  
     signal instruction : std_logic_vector (15 downto 0) := "0000000000000000";
     signal register_load,register_shift, ResetPC, PCplusI, PCplus1, R0plusI, R0plus0,
-    Rs_on_AddressUnit, Rd_on_AddressUnit, EnablePC, External_Reset,
+    Rs_on_AddressUnit, Rd_on_AddressUnit, External_Reset,
     RFLwrite, RFHwrite, WPreset, WPadd, IRload, SRIoad, rst, RD_on_AddresetUnitRSide, RS_on_AddresetUnitRSide, IR_on_LOdBus,
     Address_on_Databus, ALUout_on_Databus, IR_on_LOpndBus, IR_on_HOpndBus, RFright_on_OpndBus,
     B15to0, AandB, AorB, NotB, AaddB, AsubB, AcmpB, shrB, shlB,
@@ -85,7 +84,6 @@ use IEEE.std_logic_1164.all;
         Zin => Zin,
         Cin => Cin,
         Shadow => Shadow,
-        EnablePC => EnablePC,
         Addressbus => Addressbus
     );
 

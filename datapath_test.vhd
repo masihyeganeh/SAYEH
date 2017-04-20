@@ -11,7 +11,7 @@ architecture behavioral of testDatapath is
         port (
       clk : in std_logic;
 		ResetPC, PCplusI, PCplus1, R0plusI, R0plus0,
-		Rs_on_AddressUnit, Rd_on_AddressUnit, EnablePC,
+		Rs_on_AddressUnit, Rd_on_AddressUnit,
  		RFLwrite, RFHwrite, WPreset, WPadd, IRload, SRIoad,
 		Address_on_Databus, ALU_on_Databus, IR_on_LOpndBus, IR_on_HOpndBus, RFright_on_OpndBus,
 		Cset, Creset, Zset, Zreset, Zin, Cin, Shadow : in std_logic;
@@ -23,7 +23,7 @@ architecture behavioral of testDatapath is
 
         signal clk : std_logic := '0';
         signal ResetPC, PCplusI, PCplus1, R0plusI, R0plus0,
-        Rs_on_AddressUnit, Rd_on_AddressUnit, EnablePC,
+        Rs_on_AddressUnit, Rd_on_AddressUnit,
         RFLwrite, RFHwrite, WPreset, WPadd, IRload, SRIoad,
         Address_on_Databus, ALU_on_Databus, IR_on_LOpndBus, IR_on_HOpndBus, RFright_on_OpndBus,
         Cset, Creset, Zset, Zreset, Zin, Cin, Shadow : std_logic := '0';
@@ -42,7 +42,6 @@ begin
         R0plus0 => R0plus0,
         Rs_on_AddressUnit => Rs_on_AddressUnit,
         Rd_on_AddressUnit => Rd_on_AddressUnit,
-        EnablePC => EnablePC,
         RFLwrite => RFLwrite,
         RFHwrite => RFHwrite,
         WPreset => WPreset,

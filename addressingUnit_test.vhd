@@ -10,7 +10,7 @@ architecture behavioral of testaddressingUnit is
     component addressingUnit
         port (
             clk, ResetPC, PCplusI, R0plusI, R0plus0, address_on_databus : in std_logic := '0';
-            EnablePC, PCplus1 : in std_logic := '1';
+            PCplus1 : in std_logic := '1';
             Rside   : in std_logic_vector (15 downto 0) := "0000000000000000";
             Iside   : in std_logic_vector (7 downto 0) := "00000000";
             Address : out std_logic_vector (15 downto 0) := "0000000000000000";
@@ -19,7 +19,7 @@ architecture behavioral of testaddressingUnit is
     end component;
 
     signal clk, ResetPC, PCplusI, R0plusI, R0plus0, address_on_databus : std_logic := '0';
-    signal EnablePC, PCplus1 : std_logic := '1';
+    signal PCplus1 : std_logic := '1';
     signal Rside   : std_logic_vector (15 downto 0) := "0000000000000000";
     signal Iside   : std_logic_vector (7 downto 0) := "00000000";
     signal Address, Databus : std_logic_vector (15 downto 0) := "0000000000000000";
@@ -27,7 +27,6 @@ architecture behavioral of testaddressingUnit is
 begin
     myAddressingUnit : addressingUnit port map (
         clk      => clk,
-        EnablePC => EnablePC,
         ResetPC  => ResetPC,
         PCplusI  => PCplusI,
         PCplus1  => PCplus1,

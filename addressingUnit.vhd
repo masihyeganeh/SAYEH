@@ -4,7 +4,6 @@ use IEEE.std_logic_1164.all;
 entity addressingUnit is
     port (
         clk, ResetPC, PCplusI, PCplus1, R0plusI, R0plus0, address_on_databus : in std_logic := '0';
-        EnablePC : in std_logic := '1';
         Rside   : in std_logic_vector (15 downto 0) := "0000000000000000";
         Iside   : in std_logic_vector (7 downto 0) := "00000000";
         Address : out std_logic_vector (15 downto 0)  := "0000000000000000";
@@ -14,7 +13,7 @@ end addressingUnit;
 
 architecture dataflow of addressingUnit is
     component PC port (
-        clk, EnablePC : in std_logic;
+        clk : in std_logic;
         PCinput  : in std_logic_vector (15 downto 0);
         PCoutput : out std_logic_vector (15 downto 0):= "0000000000000000"
     );
@@ -43,7 +42,6 @@ begin
 
     l1 : PC port map (
         clk      => clk,
-        EnablePC => EnablePC,
         PCinput    => AddressSignal,
         PCoutput   => PCout
     );

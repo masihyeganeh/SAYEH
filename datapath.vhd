@@ -9,7 +9,6 @@ entity datapath is
  		RFLwrite, RFHwrite, WPreset, WPadd, IRload, SRIoad,
 		Address_on_Databus, ALUout_on_Databus, IR_on_LOpndBus, IR_on_HOpndBus, RFright_on_OpndBus,
 		Cset, Creset, Zset, Zreset, Zin, Cin, Shadow : in std_logic :='0';
-		EnablePC : in std_logic := '1';
 	 	Addressbus : out std_logic_vector (15 downto 0);
 		Databus : inout std_logic_vector (15 downto 0)
 	
@@ -30,7 +29,7 @@ architecture rtl of datapath is
         Address : OUT std_logic_vector (15 DOWNTO 0);
 		Databus : OUT std_logic_vector (15 DOWNTO 0);
         clk, ResetPC, PCplusI, PCplus1 : IN std_logic;
-        R0plusI, R0plus0, EnablePC, address_on_databus : IN std_logic
+        R0plusI, R0plus0, address_on_databus : IN std_logic
     );
 	end component;
 
@@ -113,7 +112,6 @@ begin
 	PCplus1 => PCplus1,
 	R0plusI => R0plusI,
 	R0plus0 => R0plus0,
-	EnablePC => EnablePC,
 	address_on_databus => address_on_databus
 	);
 
