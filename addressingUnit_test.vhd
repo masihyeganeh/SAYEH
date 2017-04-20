@@ -32,6 +32,7 @@ begin
         PCplus1  => PCplus1,
         R0plusI  => R0plusI,
         R0plus0  => R0plus0,
+        address_on_databus => address_on_databus,
         Rside    => Rside,
         Iside    => Iside,
         Address  => Address,
