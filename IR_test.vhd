@@ -11,21 +11,28 @@ architecture behavioral of testir is
         port (
             clk     : in std_logic;
             IRload  : in std_logic;
-            dataBus : in std_logic_vector (15 downto 0);
+            Databus : in std_logic_vector (15 downto 0);
             IRout   : out std_logic_vector (15 downto 0)
         );
     end component;
 
     signal clk     : std_logic;
-    signal IRload  : std_logic;
-    signal dataBus : std_logic_vector (15 downto 0);
+    signal IRload  : std_logic := '1';
+    signal Databus : std_logic_vector (15 downto 0) := "0000000000000000";
     signal IRout   : std_logic_vector (15 downto 0);
 
 begin
     myIr : ir port map (
         clk     => clk,
         IRload  => IRload,
-        dataBus => dataBus,
+        Databus => Databus,
         IRout   => IRout
     );
+    process
+    begin
+        clk <= '0';
+        wait for 10 NS;
+        clk <= '1';
+        wait for 10 NS;
+    end process;
 end behavioral; -- behavioral
