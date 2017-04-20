@@ -16,7 +16,7 @@ use IEEE.std_logic_1164.all;
       component DP port (
         register_load, register_shift : in std_logic;
 		clk : in std_logic;
-		ResetPC, PCplusI, PCplus1, R0plus1, R0plus0,
+		ResetPC, PCplusI, PCplus1, R0plusI, R0plus0,
 		Rs_on_AddressUnit, Rd_on_AddressUnit, EnablePC,
  		RFLwrite, RFHwrite, WPreset, WPadd, IRload, SRIoad,
 		Address_on_Databus, ALU_on_Databus, IR_on_LOpndBus, IR_on_HOpndBus, RFright_on_OpndBus,
@@ -32,7 +32,7 @@ use IEEE.std_logic_1164.all;
    component ctrl port (
        	ReadMem, WriteMem, MemDataReady, -- memory 
 		address_on_databus, -- databus
-		resetPc, PCplus1, PCplus0, R0plus1, R0plus0, -- pc
+		resetPc, PCplus1, PCplus0, R0plusI, R0plus0, -- pc
 		RFLwrite, RFHwrite, -- registerfile
 		WPadd, WPreset, -- wp
 		RS_on_AddresetUnitRSide, RD_on_AddresetUnitRSide, -- addressLogic
@@ -47,7 +47,7 @@ use IEEE.std_logic_1164.all;
 
  
     signal instruction : std_logic_vector (15 downto 0);
-    signal register_load,register_shift, ResetPC, PCplusI, PCplus1, R0plus1, R0plus0,
+    signal register_load,register_shift, ResetPC, PCplusI, PCplus1, R0plusI, R0plus0,
     Rs_on_AddressUnit, Rd_on_AddressUnit, EnablePC,
     RFLwrite, RFHwrite, WPreset, WPadd, IRload, SRIoad, rst, RD_on_AddresetUnitRSide, RS_on_AddresetUnitRSide, IR_on_LOdBus,
     Address_on_Databus, ALU_on_Databus, IR_on_LOpndBus, IR_on_HOpndBus, RFright_on_OpndBus,
@@ -68,7 +68,7 @@ use IEEE.std_logic_1164.all;
         ResetPC => ResetPC,
         PCplusI => PCplusI,
         PCplus1 => PCplus1,
-        R0plus1 => R0plus1,
+        R0plusI => R0plusI,
         R0plus0 => R0plus0,
         Rs_on_AddressUnit => Rs_on_AddressUnit,
         Rd_on_AddressUnit => Rd_on_AddressUnit,
@@ -111,7 +111,7 @@ use IEEE.std_logic_1164.all;
         resetPc => resetPc,
         PCplus1 => PCplus1,
         PCplus0 => PCplusI,
-        R0plus1 => R0plus1,
+        R0plusI => R0plusI,
         R0plus0 => R0plus0,
         -- pc
         RFLwrite => RFLwrite,

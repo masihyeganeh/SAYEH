@@ -5,7 +5,7 @@ entity controller is
 	port (
 		ReadMem, WriteMem, -- memory 
 		address_on_databus, -- databus
-		ResetPc, PCplus1, PCplusI, R0plus1, R0plus0, -- pc
+		ResetPc, PCplus1, PCplusI, R0plusI, R0plus0, -- pc
 		RFLwrite, RFHwrite, -- registerfile
 		WPadd, WPreset, -- wp
 		RS_on_AddresetUnitRSide, RD_on_AddresetUnitRSide, -- addressLogic

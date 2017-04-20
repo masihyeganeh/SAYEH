@@ -4,7 +4,7 @@ use IEEE.std_logic_1164.all;
 entity datapath is
 	port (register_load, register_shift : in std_logic;
 		clk : in std_logic;
-		ResetPC, PCplusI, PCplus1, R0plus1, R0plus0,
+		ResetPC, PCplusI, PCplus1, R0plusI, R0plus0,
 		Rs_on_AddressUnit, Rd_on_AddressUnit, EnablePC,
  		RFLwrite, RFHwrite, WPreset, WPadd, IRload, SRIoad,
 		Address_on_Databus, ALU_on_Databus, IR_on_LOpndBus, IR_on_HOpndBus, RFright_on_OpndBus,
@@ -29,7 +29,7 @@ architecture rtl of datapath is
         Iside : IN std_logic_vector (7 DOWNTO 0);
         Address : OUT std_logic_vector (15 DOWNTO 0);
         clk, ResetPC, PCplusI, PCplus1 : IN std_logic;
-        R0plus1, R0plus0, EnablePC : IN std_logic
+        R0plusI, R0plus0, EnablePC : IN std_logic
     );
 	end component;
 
@@ -99,7 +99,7 @@ architecture rtl of datapath is
 
 begin
 	GPR : fourRegister port map (register_in, clk, register_load, register_shift, register_out);
-    AU  : addressingUnit port map (Rside, Iside, Address, clk, ResetPC, PCplusI, PCplus1, R0plus1, R0plus0, EnablePC);
+    AU  : addressingUnit port map (Rside, Iside, Address, clk, ResetPC, PCplusI, PCplus1, R0plusI, R0plus0, EnablePC);
 	AL  : alu port map (
 		B15downto0         => B15downto0,
         AandB              => AandB,
