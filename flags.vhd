@@ -9,7 +9,6 @@ entity flags is
         Creset : in  std_logic := '0';
         Zset   : in  std_logic := '0';
         Zreset : in  std_logic := '0';
-        -- SRload : in  std_logic; -- kys
         Zin    : in  std_logic := '0';
         Cin    : in  std_logic := '0';
         Zout   : out std_logic := '0';

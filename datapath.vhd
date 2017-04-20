@@ -72,7 +72,6 @@ architecture rtl of datapath is
 		Creset : in  std_logic;
 		Zset   : in  std_logic;
 		Zreset : in  std_logic;
-		--SRload : in  std_logic; -- kys
 		Zin    : in  std_logic;
 		Cin    : in  std_logic;
 		Zout   : out std_logic;

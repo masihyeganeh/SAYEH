@@ -12,7 +12,7 @@ entity controller is
 		IRload, Shadow, -- IR
 		IR_on_LOpndBus, RFright_on_OpndBus, IR_on_HOpndBus, -- OPndBus
 		B15to0, AandB, AorB, NotB, AaddB, AsubB, AcmpB, shrB, shlB, -- alu
-		Cset, Creset, Zset, ZReset, SRload : out std_logic;  --flags
+		Cset, Creset, Zset, ZReset : out std_logic;  --flags
 		IR : in std_logic_vector (15 downto 0);
 		clk, External_Reset, MemDataReady, Zin, Cin : in std_logic
 	);
