@@ -10,7 +10,7 @@ entity datapath is
 		Address_on_Databus, ALUout_on_Databus, IR_on_LOpndBus, IR_on_HOpndBus, RFright_on_OpndBus,
 		Cset, Creset, Zset, Zreset, Zin, Cin, Shadow : in std_logic :='0';
 	 	Addressbus : out std_logic_vector (15 downto 0) := "0000000000000000";
-		Databus : inout std_logic_vector (15 downto 0) := "0000000000000000"
+		Databus : out std_logic_vector (15 downto 0) := "0000000000000000"
 	
 	);
 end datapath;
@@ -96,6 +96,7 @@ architecture rtl of datapath is
 	signal RSide : std_logic_vector (15 downto 0) := "0000000000000000";
 	signal ISide : std_logic_vector (7 DOWNTO 0) := "00000000";
 	signal registeraddr : std_logic_vector(3 downto 0) := "0000";
+	signal DatabusSignal : std_logic_vector (15 downto 0) := "0000000000000000";
 
 
 begin
@@ -104,7 +105,7 @@ begin
 	Rside => Rside,
 	Iside => Iside,
 	Address => Addressbus,
-	Databus => Databus,
+	Databus => DatabusSignal,
 	clk => clk,
 	ResetPC => ResetPC,
 	PCplusI => PCplusI,
@@ -142,15 +143,16 @@ begin
 		end if;
 	end process ;
 
-	process( ALUout_on_Databus, ALUout )
+	process( ALUout_on_Databus, ALUout, DatabusSignal )
 	begin
 		if ALUout_on_Databus = '1' then
-			Databus <= ALUout;
+			DatabusSignal <= ALUout;
 		end if;
+		Databus <= DatabusSignal;
 	end process ;
 
-	RF  : registerFile port map (Databus, clk, registeraddr, WPout, RFLwrite, RFHwrite, Left, Right); 
-	instrunctionreg : IR port map (clk, IRload, Databus, IRout);
+	RF  : registerFile port map (DatabusSignal, clk, registeraddr, WPout, RFLwrite, RFHwrite, Left, Right); 
+	instrunctionreg : IR port map (clk, IRload, DatabusSignal, IRout);
 	SR  : flags port map(clk, Cset, Creset, Zset, Zreset, Zin, Cin, Zout, Cout);
 	WindowPointer : WP port map (WPin, clk, WPreset, WPadd, WPout);
 end architecture;
