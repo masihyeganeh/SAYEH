@@ -145,7 +145,7 @@ begin
 		Databus <= DatabusSignal;
 	end process ;
 
-	RF  : registerFile port map (DatabusSignal, clk, registeraddr, WPout, RFLwrite, RFHwrite, Left, Right); 
+	RF  : registerFile port map (DatabusSignal, clk, registeraddr, WPout, RFLwrite, RFHwrite, Right, Left); 
 	instrunctionreg : IR port map (clk, IRload, DatabusSignal, IRout);
 	SR  : flags port map(clk, Cset, Creset, Zset, Zreset, Zin, Cin, Zout, Cout);
 	WindowPointer : WP port map (WPin, clk, WPreset, WPadd, WPout);
