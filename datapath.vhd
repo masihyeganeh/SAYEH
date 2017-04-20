@@ -16,11 +16,6 @@ entity datapath is
 end datapath;
 
 architecture rtl of datapath is
-	component fourRegister is
-		port (d : in std_logic_vector(3 downto 0);
-			clk, load, shift : in std_logic;
-			qout : out std_logic);
-	end component;
 
 	component addressingUnit is
 	PORT (
@@ -100,7 +95,6 @@ architecture rtl of datapath is
 
 
 begin
-	--GPR : fourRegister port map (register_in, clk, register_out);
     AU  : addressingUnit port map (
 	Rside => Rside,
 	Iside => Iside,
