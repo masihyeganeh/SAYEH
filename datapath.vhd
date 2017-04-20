@@ -9,8 +9,8 @@ entity datapath is
  		RFLwrite, RFHwrite, WPreset, WPadd, IRload,
 		Address_on_Databus, ALUout_on_Databus, IR_on_LOpndBus, IR_on_HOpndBus, RFright_on_OpndBus,
 		Cset, Creset, Zset, Zreset, Zin, Cin, Shadow : in std_logic :='0';
-	 	Addressbus : out std_logic_vector (15 downto 0);
-		Databus : inout std_logic_vector (15 downto 0)
+	 	Addressbus : out std_logic_vector (15 downto 0) := "0000000000000000";
+		Databus : inout std_logic_vector (15 downto 0) := "0000000000000000"
 	
 	);
 end datapath;
@@ -91,7 +91,7 @@ architecture rtl of datapath is
 
 	signal B15downto0, AandB, AorB, notB, shlB, shrB, AaddB, AsubB, AcmpB, Cout, Zout : std_logic := '0';
 	signal Right, Left, OpndBus, ALUout, Address, AddressUnitRSideBus : std_logic_vector(15 downto 0) := "0000000000000000";
-	signal IRout : std_logic_vector(15 downto 0) := "1011010010110100";
+	signal IRout : std_logic_vector(15 downto 0) := "0000000000000000";
 	signal WPout, WPin : std_logic_vector(5 downto 0) := "000000";
 	signal RSide : std_logic_vector (15 downto 0) := "0000000000000000";
 	signal ISide : std_logic_vector (7 DOWNTO 0) := "00000000";
