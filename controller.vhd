@@ -4,17 +4,17 @@ use IEEE.std_logic_1164.all;
 entity controller is
 	port (
 		ReadMem, WriteMem, -- memory 
-		address_on_databus, -- databus
+		address_on_databus, ALUout_on_Databus, -- databus
 		ResetPc, PCplus1, PCplusI, R0plusI, R0plus0, -- pc
 		RFLwrite, RFHwrite, -- registerfile
 		WPadd, WPreset, -- wp
 		RS_on_AddresetUnitRSide, RD_on_AddresetUnitRSide, -- addressLogic
 		IRload, Shadow, -- IR
-		IR_on_LOdBus, RFright_on_OpndBus, IR_on_HOpndBus, -- OPndBus
+		IR_on_LOpndBus, RFright_on_OpndBus, IR_on_HOpndBus, -- OPndBus
 		B15to0, AandB, AorB, NotB, AaddB, AsubB, AcmpB, shrB, shlB, -- alu
 		Cset, Creset, Zset, ZReset, SRload : out std_logic;  --flags
 		IR : in std_logic_vector (15 downto 0);
-		clk, External_Reset, MemDataReady : in std_logic
+		clk, External_Reset, MemDataReady, Zin, Cin : in std_logic
 	);
 end entity;
 
@@ -37,6 +37,7 @@ begin
 
 	-- next based on state
 	process (current_state)
+		variable operation : std_logic_vector (3 downto 0);
 	begin
 		case current_state is
 			when reset =>
@@ -61,9 +62,15 @@ begin
 
 			when decode =>
 				next_state <= effectiveAddress;
-				case ( IR (15 downto 12) ) is
+				if shadow_select = '1' then
+					operation := IR (8 downto 5);
+				else
+					operation := IR (15 downto 12);
+				end if ;
+				case ( operation ) is
 					when "0001" =>
-						-- RS should be on data bus
+						B15to0 <= '1';
+						ALUout_on_Databus <= '1';
 						RFLwrite <= '1';
 						RFHwrite <= '1';
 					when "0010" =>
@@ -73,7 +80,8 @@ begin
 						RFHwrite <= '1';
 						ReadMem <= '1';
 					when "0011" =>
-						-- RS should be on data bus
+						B15to0 <= '1';
+						ALUout_on_Databus <= '1';
 						RD_on_AddresetUnitRSide <= '1';
 						R0plus0 <= '1';
 						WriteMem <= '1';
@@ -81,7 +89,7 @@ begin
 					when "0111" => AorB  <= '1'; -- or
 					when "1001" => shlB  <= '1'; -- shift left
 					when "1010" => shrB  <= '1'; -- shift right
-					when "1011" => AandB <= '1'; -- addition
+					when "1011" => AaddB <= '1'; -- addition
 					when "1100" => AsubB <= '1'; -- subtraction
 					when "1110" => AcmpB <= '1'; -- comparison
 					when "0000" =>
@@ -96,11 +104,11 @@ begin
 
 							when "0111" => PCplusI <= '1';
 							when "1000" =>
-								if Zin then
+								if Zin = '1' then
 									PCplusI <= '1';
 								end if ;
 							when "1001" =>
-								if Cin then
+								if Cin = '1' then
 									PCplusI <= '1';
 								end if ;
 							when "1010" => WPadd <= '1';
@@ -132,8 +140,9 @@ begin
 
 			when execute =>
 				if no_operation = '0' then
+					ALUout_on_Databus <= '1';
 					-- TODO: Implement execute here
-					-- pass operands to alu and let it do the calculation
+					-- pass operation to alu and let it do the calculation
 				end if ;
 				next_state <= writeBack;
 
@@ -146,9 +155,9 @@ begin
 
 				if shadow_select = '0' then
 					next_state <= execute; -- TODO: if instruction is not 16 bits
-					shadow_select = '1'
+					shadow_select <= '1';
 				else
-					shadow_select = '0'
+					shadow_select <= '0';
 				end if ;
 
 			when halt =>
