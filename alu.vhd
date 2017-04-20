@@ -14,7 +14,7 @@ end ALU;
 
 architecture RTL of ALU is
 begin
-    ALUProcess : process( destinationOperand, sourceOperand )
+    ALUProcess : process( B15downto0, AandB, AorB, notB, AaddB, AsubB, AcmpB, shlB, shrB, destinationOperand, sourceOperand, Zin, Cin )
         variable temp16bits : std_logic_vector (15 downto 0);
         variable temp17bits : std_logic_vector (16 downto 0);
     begin
@@ -49,12 +49,18 @@ begin
 
         -- subtraction
         elsif AsubB = '1' then
+            temp16bits := std_logic_vector(signed(destinationOperand) - signed(sourceOperand));
+            output <= temp16bits;
+            if (temp16bits = "0000000000000000") then
+                Zout <= '1';
+            else
+                Zout <= '0';
+            end if;
+
             if (signed(destinationOperand) < signed(sourceOperand)) then
                 Cout <= '1';
-                output <= std_logic_vector(signed(destinationOperand) - signed(sourceOperand) - 1);
             else
                 Cout <= '0';
-                output <= std_logic_vector(signed(destinationOperand) - signed(sourceOperand));
             end if;
 
         -- comparison
