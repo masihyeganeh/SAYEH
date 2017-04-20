@@ -12,8 +12,8 @@ architecture behavioral of testsayeh is
          clk : in std_logic;
          ExternalReset, MemDataReady : in std_logic;
          ReadMem, WriteMem, ReadIO, WriteIO : out std_logic;
-         addressbus : out std_logic_vector (15 downto 0);
-         databus : inout std_logic_vector (15 downto 0)
+         Addressbus : out std_logic_vector (15 downto 0);
+         Databus : inout std_logic_vector (15 downto 0)
         );
     end component;
 
@@ -21,7 +21,7 @@ architecture behavioral of testsayeh is
         signal   clk :  std_logic;
         signal   ExternalReset :  std_logic;
         signal   ReadMem, WriteMem, ReadIO, WriteIO, MemDataReady :  std_logic;
-        signal   addressbus :  std_logic_vector (15 downto 0);
+        signal   Addressbus :  std_logic_vector (15 downto 0);
         signal   databus :  std_logic_vector (15 downto 0);
     
 
@@ -35,7 +35,7 @@ begin
          ReadIO => ReadIO,
          WriteIO => WriteIO,
          MemDataReady => MemDataReady,
-         addressbus => addressbus,
+         Addressbus => Addressbus,
          databus => databus
     );
     MemDataReady <= '1';

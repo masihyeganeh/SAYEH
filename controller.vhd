@@ -59,7 +59,11 @@ begin
 				ReadMem <= '1';
 				WriteMem <= '0';
 				IRload <= '1';
-				PCPlus1 <= '1';
+				ResetPC <= '0';
+				PCplusI <= '0';
+				PCplus1 <= '1';
+				R0plusI <= '0';
+				R0plus0 <= '0';
 
 			when decode =>
 				next_state <= effectiveAddress;

@@ -6,7 +6,7 @@ use IEEE.std_logic_1164.all;
      clk : in std_logic;
      ExternalReset, MemDataReady : in std_logic := '0';
      ReadMem, WriteMem, ReadIO, WriteIO : out std_logic := '0';
-     addressbus : out std_logic_vector (15 downto 0) := "0000000000000000";
+     Addressbus : out std_logic_vector (15 downto 0) := "0000000000000000";
      Databus : inout std_logic_vector (15 downto 0) := "0000000000000000"
    );
  end sayeh;
