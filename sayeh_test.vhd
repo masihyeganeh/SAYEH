@@ -17,17 +17,26 @@ architecture behavioral of testsayeh is
         );
     end component;
 
+    component memory
+        port (
+            address : in std_logic_vector (15 downto 0) := "0000000000000000";
+            data_in : in std_logic_vector (15 downto 0) := "0000000000000000";
+            clk, ReadMem, WriteMem : in std_logic := '0';
+            MemDataReady : out std_logic := '0';
+            data_out : out std_logic_vector (15 downto 0) := "0000000000000000"
+        );
+    end component;
+
 
         signal   clk :  std_logic;
         signal   ExternalReset :  std_logic;
         signal   ReadMem, WriteMem, ReadIO, WriteIO, MemDataReady :  std_logic;
         signal   Addressbus :  std_logic_vector (15 downto 0);
-        signal   databus :  std_logic_vector (15 downto 0);
+        signal   Databus :  std_logic_vector (15 downto 0);
     
 
 begin
     mysayeh : sayeh port map (
-        
          clk => clk,
          ExternalReset => ExternalReset,
          ReadMem => ReadMem,
@@ -36,7 +45,16 @@ begin
          WriteIO => WriteIO,
          MemDataReady => MemDataReady,
          Addressbus => Addressbus,
-         databus => databus
+         Databus => Databus
+    );
+    mymemory : memory port map (
+        address => Addressbus,
+        data_in => Databus,
+        clk => clk,
+        ReadMem => ReadMem,
+        WriteMem => WriteMem,
+        MemDataReady => MemDataReady,
+        data_out => Databus
     );
     MemDataReady <= '1';
 
