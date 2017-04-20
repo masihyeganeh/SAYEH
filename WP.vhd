@@ -5,15 +5,15 @@ use IEEE.numeric_std.all;
 entity WP is
     port (
         clk     : in std_logic;
-        WPadd   : in std_logic;
-        WPreset : in std_logic;
-        WPin    : in std_logic_vector(5 downto 0);
-        WPout   : out std_logic_vector(5 downto 0)
+        WPadd   : in std_logic := '0';
+        WPreset : in std_logic := '0';
+        WPin    : in std_logic_vector(5 downto 0) := "000000";
+        WPout   : out std_logic_vector(5 downto 0) := "000000"
     );
 end WP;
 
 architecture behavioral of WP is
-    signal pointTo : std_logic_vector(5 downto 0);
+    signal pointTo : std_logic_vector(5 downto 0) := "000000";
 begin
     process (clk)
     begin

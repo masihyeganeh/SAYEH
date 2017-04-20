@@ -1,22 +1,23 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 
-entity ProgramCounter is
+entity pc is
     port (
-        clk, EnablePC : in std_logic;
-        input  : in std_logic_vector (15 downto 0);
-        output : out std_logic_vector (15 downto 0) := "0000000000000000"
+        clk : in std_logic;
+        EnablePC : in std_logic := '1';
+        PCinput  : in std_logic_vector (15 downto 0) := "0000000000000000";
+        PCoutput : out std_logic_vector (15 downto 0) := "0000000000000000"
     );
-end ProgramCounter;
+end pc;
 
-architecture dataflow of ProgramCounter is
+architecture behavioral of pc is
 begin
-    process (clk)
+    process (clk, EnablePC, PCinput)
     begin
         if (clk'Event and clk = '1') then
             if (EnablePC = '1') then
-                output <= input;
+                PCoutput <= PCinput;
             end if;
         end if;
     end process;
-end dataflow;
+end behavioral;

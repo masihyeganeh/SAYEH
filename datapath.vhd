@@ -5,15 +5,14 @@ entity datapath is
 	port (
 		clk : in std_logic;
 		ResetPC, PCplusI, PCplus1, R0plusI, R0plus0,
-		Rs_on_AddressUnit, Rd_on_AddressUnit, EnablePC,
+		Rs_on_AddressUnit, Rd_on_AddressUnit,
  		RFLwrite, RFHwrite, WPreset, WPadd, IRload, SRIoad,
-		Address_on_Databus, ALU_on_Databus, IR_on_LOpndBus, IR_on_HOpndBus, RFright_on_OpndBus,
-		Cset, Creset, Zset, Zreset, Zin, Cin, Shadow : in std_logic;
-		register_in : in std_logic_vector (3 downto 0);
-	 	RSide : in std_logic_vector (15 downto 0);
-		ISide : in std_logic_vector (7 DOWNTO 0);
-		Addressbus, Instruction : out std_logic_vector (15 downto 0);
-		register_out, Cout, Zout : out std_logic
+		Address_on_Databus, ALUout_on_Databus, IR_on_LOpndBus, IR_on_HOpndBus, RFright_on_OpndBus,
+		Cset, Creset, Zset, Zreset, Zin, Cin, Shadow : in std_logic :='0';
+		EnablePC : in std_logic := '1';
+	 	Addressbus : out std_logic_vector (15 downto 0);
+		Databus : inout std_logic_vector (15 downto 0)
+	
 	);
 end datapath;
 
@@ -29,8 +28,9 @@ architecture rtl of datapath is
         Rside : IN std_logic_vector (15 DOWNTO 0);
         Iside : IN std_logic_vector (7 DOWNTO 0);
         Address : OUT std_logic_vector (15 DOWNTO 0);
+		Databus : OUT std_logic_vector (15 DOWNTO 0);
         clk, ResetPC, PCplusI, PCplus1 : IN std_logic;
-        R0plusI, R0plus0, EnablePC : IN std_logic
+        R0plusI, R0plus0, EnablePC, address_on_databus : IN std_logic
     );
 	end component;
 
@@ -62,7 +62,7 @@ architecture rtl of datapath is
 		clk : in std_logic;
 		IRload : in std_logic;
 		dataBus : in std_logic_vector(15 downto 0);
-		WPin : out std_logic_vector (5 downto 0)
+		IRout : out std_logic_vector (15 downto 0)
  	);
 	end component;
 
@@ -91,14 +91,32 @@ architecture rtl of datapath is
   	);
 	end component;
 
-	signal B15downto0, AandB, AorB, notB, shlB, shrB, AaddB, AsubB, AcmpB : std_logic;
-	signal Right, Left, OpndBus, ALUout, Address, AddressUnitRSideBus, Databus : std_logic_vector(15 downto 0);
-	signal WPout, WPin : std_logic_vector(5 downto 0);
-	signal registeraddr : std_logic_vector(3 downto 0);
+	signal B15downto0, AandB, AorB, notB, shlB, shrB, AaddB, AsubB, AcmpB, Cout, Zout : std_logic := '0';
+	signal Right, Left, OpndBus, ALUout, Address, AddressUnitRSideBus : std_logic_vector(15 downto 0) := "0000000000000000";
+	signal IRout : std_logic_vector(15 downto 0) := "1011010010110100";
+	signal WPout, WPin : std_logic_vector(5 downto 0) := "000000";
+	signal RSide : std_logic_vector (15 downto 0) := "0000000000000000";
+	signal ISide : std_logic_vector (7 DOWNTO 0) := "00000000";
+	signal registeraddr : std_logic_vector(3 downto 0) := "0000";
+
 
 begin
 	--GPR : fourRegister port map (register_in, clk, register_out);
-    AU  : addressingUnit port map (Rside, Iside, Address, clk, ResetPC, PCplusI, PCplus1, R0plusI, R0plus0, EnablePC);
+    AU  : addressingUnit port map (
+	Rside => Rside,
+	Iside => Iside,
+	Address => Addressbus,
+	Databus => Databus,
+	clk => clk,
+	ResetPC => ResetPC,
+	PCplusI => PCplusI,
+	PCplus1 => PCplus1,
+	R0plusI => R0plusI,
+	R0plus0 => R0plus0,
+	EnablePC => EnablePC,
+	address_on_databus => address_on_databus
+	);
+
 	AL  : alu port map (
 		B15downto0         => B15downto0,
         AandB              => AandB,
@@ -118,8 +136,17 @@ begin
         Zout               => Zout
 	);
 
+	process( IRout )
+	begin
+		if Shadow = '0' then
+			registeraddr <= IRout (11 downto 8);
+		else
+			registeraddr <= IRout (3 downto 0);
+		end if;
+	end process ; -- identifier
+
 	RF  : registerFile port map (Databus, clk, registeraddr, WPout, RFLwrite, RFHwrite, Left, Right); 
-	instrunctionreg : IR port map (clk, IRload, Databus, WPin);
+	instrunctionreg : IR port map (clk, IRload, Databus, IRout);
 	SR  : flags port map(clk, Cset, Creset, Zset, Zreset, Zin, Cin, Zout, Cout);
 	WindowPointer : WP port map (WPin, clk, WPreset, WPadd, WPout);
 end architecture;

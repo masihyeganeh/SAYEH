@@ -8,7 +8,7 @@ entity AddressLogic is
         Iside  : in std_logic_vector (7 downto 0);
         ResetPC, PCplusI, PCplus1, R0plusI : in std_logic := '0';
         R0plus0 : in std_logic := '1';
-        ALout  : out std_logic_vector (15 downto 0)
+        ALout  : out std_logic_vector (15 downto 0) := "0000000000000000"
     );
 end AddressLogic;
 

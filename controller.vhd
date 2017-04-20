@@ -24,6 +24,7 @@ architecture rtl of controller is
 	signal next_state : state;
 	signal no_operation : std_logic := '0';
 	signal shadow_select : std_logic := '0'; -- 0 : left most 8 bits instruction, 1 : : right most 8 bits instruction
+	signal has_immediate : std_logic := '0';
 begin
 	-- next to current
 	process (clk, External_Reset)
@@ -58,15 +59,18 @@ begin
 				ReadMem <= '1';
 				WriteMem <= '0';
 				IRload <= '1';
-				PCPlus1 <= '1';   
+				PCPlus1 <= '1';
 
 			when decode =>
 				next_state <= effectiveAddress;
+				has_immediate <= '0';
+
 				if shadow_select = '1' then
 					operation := IR (8 downto 5);
 				else
 					operation := IR (15 downto 12);
 				end if ;
+
 				case ( operation ) is
 					when "0001" =>
 						B15to0 <= '1';
@@ -102,36 +106,52 @@ begin
 							when "0101" => Creset       <= '1';  -- Clear carry flag
 							when "0110" => WPreset      <= '1';  -- Clear window pointer
 
-							when "0111" => PCplusI <= '1';
+							when "0111" =>
+								PCplusI <= '1';
+								has_immediate <= '1';
 							when "1000" =>
 								if Zin = '1' then
 									PCplusI <= '1';
 								end if ;
+								has_immediate <= '1';
 							when "1001" =>
 								if Cin = '1' then
 									PCplusI <= '1';
 								end if ;
-							when "1010" => WPadd <= '1';
+								has_immediate <= '1';
+							when "1010" =>
+								WPadd <= '1';
+								has_immediate <= '1';
 							when others =>
 						end case ;
 					when "1111" => 
 						case ( IR (9 downto 8) ) is
-							when "00" => RFLwrite <= '1'; -- I should be on Databus
-							when "01" => RFHwrite <= '1'; -- I should be on Databus
+							when "00" =>
+								RFLwrite <= '1'; -- I should be on Databus
+								has_immediate <= '1';
+							when "01" =>
+								RFHwrite <= '1'; -- I should be on Databus
+								has_immediate <= '1';
 							when "10" =>
 								PCplusI <= '1';
 								address_on_databus <= '1';
 								RFLwrite <= '1';
 								RFHwrite <= '1';
+								has_immediate <= '1';
 							when "11" =>
 								RD_on_AddresetUnitRSide <= '1';
 								PCplusI <= '1'; -- I should be on Databus
+								has_immediate <= '1';
 							when others =>
 						end case ;
 					when others =>
 				end case ;
 
 			when effectiveAddress =>
+				ReadMem <= '0';
+				WriteMem <= '0';
+				IRload <= '0';
+				PCPlus1 <= '0';
 				if no_operation = '0' then
 					-- TODO: Implement effectiveAddress here
 					-- fetch data from memory address if source is refering to memory or do nothing
@@ -153,12 +173,13 @@ begin
 				end if ;
 				next_state <= fetch;
 
-				if shadow_select = '0' then
-					next_state <= execute; -- TODO: if instruction is not 16 bits
+				if shadow_select = '0' and has_immediate = '0' then
+					next_state <= decode;
 					shadow_select <= '1';
 				else
 					shadow_select <= '0';
 				end if ;
+				Shadow <= shadow_select;
 
 			when halt =>
 				-- do nothing

@@ -4,16 +4,16 @@ use IEEE.numeric_std.all;
 
 entity flags is
     port (
-        clk    : in  std_logic;
-        Cset   : in  std_logic;
-        Creset : in  std_logic;
-        Zset   : in  std_logic;
-        Zreset : in  std_logic;
+        clk    : in  std_logic := '0';
+        Cset   : in  std_logic := '0';
+        Creset : in  std_logic := '0';
+        Zset   : in  std_logic := '0';
+        Zreset : in  std_logic := '0';
         -- SRload : in  std_logic; -- kys
-        Zin    : in  std_logic;
-        Cin    : in  std_logic;
-        Zout   : out std_logic;
-        Cout   : out std_logic
+        Zin    : in  std_logic := '0';
+        Cin    : in  std_logic := '0';
+        Zout   : out std_logic := '0';
+        Cout   : out std_logic := '0'
     );
 end flags;
 

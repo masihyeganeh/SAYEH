@@ -5,9 +5,9 @@ use IEEE.numeric_std.all;
 entity IR is
     port (
         clk     : in std_logic;
-        IRload  : in std_logic;
-        dataBus : in std_logic_vector (15 downto 0);
-        IRout   : out std_logic_vector (15 downto 0)
+        IRload  : in std_logic := '0';
+        dataBus : in std_logic_vector (15 downto 0) := "0000000000000000";
+        IRout   : out std_logic_vector (15 downto 0) := "0000000000000000"
     );
 end IR;
 

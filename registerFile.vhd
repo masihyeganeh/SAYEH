@@ -5,13 +5,13 @@ use IEEE.numeric_std.all;
 entity registerFile is
     port (
         clk      : in std_logic;  
-        input    : in std_logic_vector (15 downto 0);
-        RFLWrite : in std_logic;
-        RFHWrite : in std_logic;
-        WP       : in std_logic_vector (5 downto 0);
-        addr     : in std_logic_vector (3 downto 0);
-        RS       : out std_logic_vector (15 downto 0);
-        RD       : out std_logic_vector (15 downto 0)
+        input    : in std_logic_vector (15 downto 0) := "0000000000000000";
+        RFLWrite : in std_logic := '0';
+        RFHWrite : in std_logic := '0';
+        WP       : in std_logic_vector (5 downto 0) := "000000";
+        addr     : in std_logic_vector (3 downto 0) := "0000";
+        RS       : out std_logic_vector (15 downto 0) := "0000000000000000";
+        RD       : out std_logic_vector (15 downto 0) := "0000000000000000"
     );
 end registerFile;
 
@@ -19,10 +19,10 @@ architecture behavioral of registerFile is
 
     type registerType is array (63 downto 0) of std_logic_vector(15 downto 0);
 
-    signal Daddress  : std_logic_vector(5 downto 0);
-    signal Saddress  : std_logic_vector(5 downto 0);
+    signal Daddress  : std_logic_vector(5 downto 0) := "000000";
+    signal Saddress  : std_logic_vector(5 downto 0) := "000000";
     signal registers : registerType;
-    signal tempReg   : std_logic_vector(15 downto 0);
+    signal tempReg   : std_logic_vector(15 downto 0) := "0000000000000000";
 
 begin
     registerFile : process (clk)

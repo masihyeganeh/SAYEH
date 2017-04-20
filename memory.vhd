@@ -4,11 +4,11 @@ use IEEE.numeric_std.all;
 
 entity memory is
     port (
-        address : in std_logic_vector (15 downto 0);
-        data_in : in std_logic_vector (15 downto 0);
-        clk, ReadMem, WriteMem : in std_logic;
-        MemDataReady : out std_logic;
-        data_out : out std_logic_vector (15 downto 0)
+        address : in std_logic_vector (15 downto 0) := "0000000000000000";
+        data_in : in std_logic_vector (15 downto 0) := "0000000000000000";
+        clk, ReadMem, WriteMem : in std_logic := '0';
+        MemDataReady : out std_logic := '0';
+        data_out : out std_logic_vector (15 downto 0) := "0000000000000000"
     );
 end entity memory;
 

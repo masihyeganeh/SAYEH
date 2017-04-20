@@ -77,6 +77,15 @@ begin
         Cin => Cin
     );
 
+    process
+    begin
+    clk <= '0';
+    wait for 10 NS;
+    clk <= '1';
+    wait for 10 NS;
+end process;
+
+
  
 
 end behavioral;
