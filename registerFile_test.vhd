@@ -40,4 +40,12 @@ begin
         RS       => RS,
         RD       => RD
     );
+
+    process
+    begin
+        clk <= '0';
+        wait for 10 NS;
+        clk <= '1';
+        wait for 10 NS;
+    end process;
 end behavioral; -- behavioral
