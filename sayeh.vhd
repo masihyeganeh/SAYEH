@@ -7,8 +7,8 @@ use IEEE.std_logic_1164.all;
      ExternalReset, MemDataReady : in std_logic := '0';
      ReadMem, WriteMem, ReadIO, WriteIO : out std_logic := '0';
      addressbus : out std_logic_vector (15 downto 0) := "0000000000000000";
-     databus : inout std_logic_vector (15 downto 0) := "0000000000000000" --not sure if inout
-   ) ;
+     Databus : inout std_logic_vector (15 downto 0) := "0000000000000000"
+   );
  end sayeh;
 
  architecture behavioral of sayeh is
@@ -21,7 +21,8 @@ use IEEE.std_logic_1164.all;
 		Address_on_Databus, ALUout_on_Databus, IR_on_LOpndBus, IR_on_HOpndBus, RFright_on_OpndBus,
 		Cset, Creset, Zset, Zreset, Zin, Cin, Shadow : in std_logic :='0';
 		EnablePC : in std_logic := '1';
-	 	Addressbus : out std_logic_vector (15 downto 0)
+	 	Addressbus : out std_logic_vector (15 downto 0);
+    Databus : inout std_logic_vector (15 downto 0)
     );
    end component;
 
@@ -129,5 +130,5 @@ use IEEE.std_logic_1164.all;
         Zin => Zin,
         Cin => Cin
     );
- 
- end behavioral ; -- behavioral
+
+end behavioral ; -- behavioral

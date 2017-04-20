@@ -143,7 +143,14 @@ begin
 		else
 			registeraddr <= IRout (3 downto 0);
 		end if;
-	end process ; -- identifier
+	end process ;
+
+	process( ALUout_on_Databus, ALUout )
+	begin
+		if ALUout_on_Databus = '1' then
+			Databus <= ALUout;
+		end if;
+	end process ;
 
 	RF  : registerFile port map (Databus, clk, registeraddr, WPout, RFLwrite, RFHwrite, Left, Right); 
 	instrunctionreg : IR port map (clk, IRload, Databus, IRout);
