@@ -62,6 +62,21 @@ begin
 			when decode =>
 				next_state <= effectiveAddress;
 				case ( IR (15 downto 12) ) is
+					when "0001" =>
+						-- RS should be on data bus
+						RFLwrite <= '1';
+						RFHwrite <= '1';
+					when "0010" =>
+						RS_on_AddresetUnitRSide <= '1';
+						R0plus0 <= '1';
+						RFLwrite <= '1';
+						RFHwrite <= '1';
+						ReadMem <= '1';
+					when "0011" =>
+						-- RS should be on data bus
+						RD_on_AddresetUnitRSide <= '1';
+						R0plus0 <= '1';
+						WriteMem <= '1';
 					when "0110" => AandB <= '1'; -- and
 					when "0111" => AorB  <= '1'; -- or
 					when "1001" => shlB  <= '1'; -- shift left
