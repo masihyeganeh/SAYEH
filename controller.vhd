@@ -78,6 +78,31 @@ begin
 							when "0100" => Cset         <= '1';  -- Set carry flag
 							when "0101" => Creset       <= '1';  -- Clear carry flag
 							when "0110" => WPreset      <= '1';  -- Clear window pointer
+
+							when "0111" => PCplusI <= '1';
+							when "1000" =>
+								if Zin then
+									PCplusI <= '1';
+								end if ;
+							when "1001" =>
+								if Cin then
+									PCplusI <= '1';
+								end if ;
+							when "1010" => WPadd <= '1';
+							when others =>
+						end case ;
+					when "1111" => 
+						case ( IR (9 downto 8) ) is
+							when "00" => RFLwrite <= '1'; -- I should be on Databus
+							when "01" => RFHwrite <= '1'; -- I should be on Databus
+							when "10" =>
+								PCplusI <= '1';
+								address_on_databus <= '1';
+								RFLwrite <= '1';
+								RFHwrite <= '1';
+							when "11" =>
+								RD_on_AddresetUnitRSide <= '1';
+								PCplusI <= '1'; -- I should be on Databus
 							when others =>
 						end case ;
 					when others =>
