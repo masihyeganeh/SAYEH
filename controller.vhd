@@ -3,9 +3,9 @@ use IEEE.std_logic_1164.all;
 
 entity controller is
 	port (
-		ReadMem, WriteMem, MemDataReady, -- memory 
+		ReadMem, WriteMem, -- memory 
 		address_on_databus, -- databus
-		resetPc, PCplus1, PCplus0, R0plus1, R0plus0, -- pc
+		ResetPc, PCplus1, PCplusI, R0plus1, R0plus0, -- pc
 		RFLwrite, RFHwrite, -- registerfile
 		WPadd, WPreset, -- wp
 		RS_on_AddresetUnitRSide, RD_on_AddresetUnitRSide, -- addressLogic
@@ -14,21 +14,22 @@ entity controller is
 		B15to0, AandB, AorB, NotB, AaddB, AsubB, AcmpB, shrB, shlB, -- alu
 		Cset, Creset, Zset, ZReset, SRload : out std_logic;  --flags
 		IR : in std_logic_vector (15 downto 0);
-		clk, rst : in std_logic
+		clk, External_Reset, MemDataReady : in std_logic
 	);
 end entity;
 
 architecture rtl of controller is
-	type state is (fetch, decode, effectiveAddress, execute, writeBack, halt);
-	signal current_state : state;
+	type state is (reset, fetch, decode, effectiveAddress, execute, writeBack, halt);
+	signal current_state : state := reset;
 	signal next_state : state;
 	signal no_operation : std_logic := '0';
+	signal shadow_select : std_logic := '0'; -- 0 : left most 8 bits instruction, 1 : : right most 8 bits instruction
 begin
 	-- next to current
-	process (clk, rst)
+	process (clk, External_Reset)
 	begin
-		if rst = '1' then
-			current_state <= fetch;
+		if External_Reset = '1' then
+			current_state <= reset;
 		elsif clk'event and clk = '1' then
 			current_state <= next_state;
 		end if;
@@ -38,17 +39,8 @@ begin
 	process (current_state)
 	begin
 		case current_state is
-			when fetch =>
-				next_state <= decode;
-				ReadMem <= '1';
-				WriteMem <= '0';
-				IRload <= '1';
-				PCPlus1 <= '1';   
-
-			when decode =>
-				next_state <= effectiveAddress;
-				-- TODO: these bits should be cleared here or what?
-		        B15to0       <= '0';
+			when reset =>
+				B15to0       <= '0';
 				AandB        <= '0';
 				AorB         <= '0';
 				NotB         <= '0';
@@ -58,7 +50,17 @@ begin
 				shrB         <= '0';
 				shlB         <= '0';
 				no_operation <= '0';
+				next_state <= fetch;
 
+			when fetch =>
+				next_state <= decode;
+				ReadMem <= '1';
+				WriteMem <= '0';
+				IRload <= '1';
+				PCPlus1 <= '1';   
+
+			when decode =>
+				next_state <= effectiveAddress;
 				case ( IR (15 downto 12) ) is
 					when "0110" => AandB <= '1'; -- and
 					when "0111" => AorB  <= '1'; -- or
@@ -101,6 +103,13 @@ begin
 					-- write data back to memory address if destination is refering to memory or do nothing
 				end if ;
 				next_state <= fetch;
+
+				if shadow_select = '0' then
+					next_state <= execute; -- TODO: if instruction is not 16 bits
+					shadow_select = '1'
+				else
+					shadow_select = '0'
+				end if ;
 
 			when halt =>
 				-- do nothing
