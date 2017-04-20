@@ -60,7 +60,7 @@ architecture rtl of datapath is
 	port (
 		clk : in std_logic;
 		IRload : in std_logic;
-		dataBus : in std_logic_vector(15 downto 0);
+		Databus : in std_logic_vector(15 downto 0);
 		IRout : out std_logic_vector (15 downto 0)
  	);
 	end component;
