@@ -3,7 +3,7 @@ use IEEE.std_logic_1164.all;
 
 entity controller is
 	port (
-		ReadMem, WriteMem, -- memory 
+		ReadMem, WriteMem, -- memory
 		address_on_databus, ALUout_on_Databus, -- databus
 		ResetPc, PCplus1, PCplusI, R0plusI, R0plus0, -- pc
 		RFLwrite, RFHwrite, -- registerfile
@@ -12,7 +12,7 @@ entity controller is
 		IRload, Shadow, -- IR
 		IR_on_LOpndBus, RFright_on_OpndBus, IR_on_HOpndBus, -- OPndBus
 		B15to0, AandB, AorB, NotB, AaddB, AsubB, AcmpB, shrB, shlB, -- alu
-		Cset, Creset, Zset, ZReset : out std_logic;  --flags
+		Cset, Creset, Zset, ZReset : out std_logic := '0';  --flags
 		IR : in std_logic_vector (15 downto 0);
 		clk, External_Reset, MemDataReady, Zin, Cin : in std_logic
 	);
@@ -51,6 +51,7 @@ begin
 				AcmpB        <= '0';
 				shrB         <= '0';
 				shlB         <= '0';
+				ALUout_on_Databus <= '0';
 				no_operation <= '0';
 				next_state <= fetch;
 
@@ -163,14 +164,15 @@ begin
 				next_state <= execute;
 
 			when execute =>
+				ALUout_on_Databus <= '1';
 				if no_operation = '0' then
-					ALUout_on_Databus <= '1';
 					-- TODO: Implement execute here
 					-- pass operation to alu and let it do the calculation
 				end if ;
 				next_state <= writeBack;
 
 			when writeBack =>
+				ALUout_on_Databus <= '0';
 				if no_operation = '0' then
 					-- TODO: Implement writeBack here
 					-- write data back to memory address if destination is refering to memory or do nothing
