@@ -6,7 +6,7 @@ entity datapath is
 		clk : in std_logic;
 		ResetPC, PCplusI, PCplus1, R0plusI, R0plus0,
 		Rs_on_AddressUnit, Rd_on_AddressUnit,
- 		RFLwrite, RFHwrite, WPreset, WPadd, IRload, SRIoad,
+ 		RFLwrite, RFHwrite, WPreset, WPadd, IRload,
 		Address_on_Databus, ALUout_on_Databus, IR_on_LOpndBus, IR_on_HOpndBus, RFright_on_OpndBus,
 		Cset, Creset, Zset, Zreset, Zin, Cin, Shadow : in std_logic :='0';
 	 	Addressbus : out std_logic_vector (15 downto 0);

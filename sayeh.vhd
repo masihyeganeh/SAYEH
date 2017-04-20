@@ -17,7 +17,7 @@ use IEEE.std_logic_1164.all;
         clk : in std_logic;
 		ResetPC, PCplusI, PCplus1, R0plusI, R0plus0,
 		Rs_on_AddressUnit, Rd_on_AddressUnit,
- 		RFLwrite, RFHwrite, WPreset, WPadd, IRload, SRIoad,
+ 		RFLwrite, RFHwrite, WPreset, WPadd, IRload,
 		Address_on_Databus, ALUout_on_Databus, IR_on_LOpndBus, IR_on_HOpndBus, RFright_on_OpndBus,
 		Cset, Creset, Zset, Zreset, Zin, Cin, Shadow : in std_logic :='0';
 	 	Addressbus : out std_logic_vector (15 downto 0);
@@ -45,7 +45,7 @@ use IEEE.std_logic_1164.all;
     signal instruction : std_logic_vector (15 downto 0) := "0000000000000000";
     signal register_load,register_shift, ResetPC, PCplusI, PCplus1, R0plusI, R0plus0,
     Rs_on_AddressUnit, Rd_on_AddressUnit, External_Reset,
-    RFLwrite, RFHwrite, WPreset, WPadd, IRload, SRIoad, rst, RD_on_AddresetUnitRSide, RS_on_AddresetUnitRSide, IR_on_LOdBus,
+    RFLwrite, RFHwrite, WPreset, WPadd, IRload, rst, RD_on_AddresetUnitRSide, RS_on_AddresetUnitRSide, IR_on_LOdBus,
     Address_on_Databus, ALUout_on_Databus, IR_on_LOpndBus, IR_on_HOpndBus, RFright_on_OpndBus,
     B15to0, AandB, AorB, NotB, AaddB, AsubB, AcmpB, shrB, shlB,
     Cset, Creset, Zset, Zreset, Zin, Cin, Shadow : std_logic := '0';
@@ -71,7 +71,6 @@ use IEEE.std_logic_1164.all;
         WPreset => WPreset,
         WPadd => WPadd,
         IRload => IRload,
-        SRIoad => SRIoad,
         Address_on_Databus => Address_on_Databus,
         ALUout_on_Databus => ALUout_on_Databus,
         IR_on_LOpndBus => IR_on_LOpndBus,
