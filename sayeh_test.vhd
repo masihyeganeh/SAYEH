@@ -10,7 +10,7 @@ architecture behavioral of testsayeh is
     component sayeh
         port (
          clk : in std_logic;
-         ExternalReset, MemDataReady : in std_logic;
+         ExternalReset, MemDataReady : in std_logic := '1';
          ReadMem, WriteMem, ReadIO, WriteIO : out std_logic;
          Addressbus : out std_logic_vector (15 downto 0);
          Databus : inout std_logic_vector (15 downto 0)
@@ -20,10 +20,9 @@ architecture behavioral of testsayeh is
     component memory
         port (
             address : in std_logic_vector (15 downto 0) := "0000000000000000";
-            data_in : in std_logic_vector (15 downto 0) := "0000000000000000";
+            databus : inout std_logic_vector (15 downto 0);
             clk, ReadMem, WriteMem : in std_logic := '0';
-            MemDataReady : out std_logic := '0';
-            data_out : out std_logic_vector (15 downto 0) := "0000000000000000"
+            MemDataReady : out std_logic := '1'
         );
     end component;
 
@@ -33,6 +32,8 @@ architecture behavioral of testsayeh is
         signal   ReadMem, WriteMem, ReadIO, WriteIO, MemDataReady :  std_logic;
         signal   Addressbus :  std_logic_vector (15 downto 0);
         signal   Databus :  std_logic_vector (15 downto 0);
+        signal   MemoryDatabus :  std_logic_vector (15 downto 0);
+        signal   SayehDatabus :  std_logic_vector (15 downto 0);
     
 
 begin
@@ -45,18 +46,28 @@ begin
          WriteIO => WriteIO,
          MemDataReady => MemDataReady,
          Addressbus => Addressbus,
-         Databus => Databus
+         Databus => SayehDatabus
     );
     mymemory : memory port map (
         address => Addressbus,
-        data_in => Databus,
+        databus => MemoryDatabus,
         clk => clk,
         ReadMem => ReadMem,
         WriteMem => WriteMem,
-        MemDataReady => MemDataReady,
-        data_out => Databus
+        MemDataReady => MemDataReady
     );
-    MemDataReady <= '1';
+    ExternalReset <= '0';
+
+    process( ReadMem, MemoryDatabus, SayehDatabus )
+	begin
+		if ReadMem = '1' then
+			Databus <= MemoryDatabus;
+            -- SayehDatabus <= Databus;
+		else
+			Databus <= SayehDatabus;
+            -- MemoryDatabus <= Databus;
+		end if;
+	end process ;
 
 process
     begin
