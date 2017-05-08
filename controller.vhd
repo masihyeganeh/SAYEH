@@ -121,6 +121,7 @@ begin
 						WriteMem <= '1';
 					when "0110" => AandB <= '1'; -- and
 					when "0111" => AorB  <= '1'; -- or
+					when "1000" => notB  <= '1'; -- not
 					when "1001" => shlB  <= '1'; -- shift left
 					when "1010" => shrB  <= '1'; -- shift right
 					when "1011" => AaddB <= '1'; -- addition
