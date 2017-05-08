@@ -7,7 +7,7 @@ use IEEE.std_logic_1164.all;
      ExternalReset, MemDataReady : in std_logic := '0';
      ReadMem, WriteMem, ReadIO, WriteIO : out std_logic := '0';
      Addressbus : out std_logic_vector (15 downto 0) := "0000000000000000";
-     Databus : out std_logic_vector (15 downto 0) := "0000000000000000"
+     Databus : inout std_logic_vector (15 downto 0) := "0000000000000000"
    );
  end sayeh;
 
@@ -20,8 +20,8 @@ use IEEE.std_logic_1164.all;
  		RFLwrite, RFHwrite, WPreset, WPadd, IRload,
 		Address_on_Databus, ALUout_on_Databus, IR_on_LOpndBus, IR_on_HOpndBus, RFright_on_OpndBus,
 		Cset, Creset, Zset, Zreset, Zin, Cin, Shadow : in std_logic :='0';
-	 	Addressbus : out std_logic_vector (15 downto 0);
-    Databus : out std_logic_vector (15 downto 0)
+	 	Addressbus : out std_logic_vector (15 downto 0) := "0000000000000000";
+		Databus : inout std_logic_vector (15 downto 0) := "0000000000000000"
     );
    end component;
 
@@ -83,13 +83,14 @@ use IEEE.std_logic_1164.all;
         Zin => Zin,
         Cin => Cin,
         Shadow => Shadow,
-        Addressbus => Addressbus
+        Addressbus => Addressbus,
+        Databus => Databus
     );
 
     ctrl : controller port map (
         ReadMem => ReadMem,
         WriteMem => WriteMem,
-        address_on_databus => address_on_databus,
+        address_on_databus => Address_on_Databus,
         ALUout_on_Databus => ALUout_on_Databus,
         ResetPc => ResetPc,
         PCplus1 => PCplus1,

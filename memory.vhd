@@ -5,10 +5,9 @@ use IEEE.numeric_std.all;
 entity memory is
     port (
         address : in std_logic_vector (15 downto 0) := "0000000000000000";
-        data_in : in std_logic_vector (15 downto 0) := "0000000000000000";
+        databus : inout std_logic_vector (15 downto 0);
         clk, ReadMem, WriteMem : in std_logic := '0';
-        MemDataReady : out std_logic := '0';
-        data_out : out std_logic_vector (15 downto 0) := "0000000000000000"
+        MemDataReady : out std_logic := '0'
     );
 end entity memory;
 
@@ -18,18 +17,19 @@ architecture behavioral of memory is
 begin
     process( ReadMem, WriteMem, address )
     begin
-        buffermem(0) <= "0000000000000110"; -- cwp
-        buffermem(1) <= "1111000001011101"; -- mil r0, 01011101
-        buffermem(2) <= "1111000100000101"; -- mih r0, 00000101
-        buffermem(3) <= "1111010000000001"; -- mil r1, 00000001
-        buffermem(4) <= "1111010100000000"; -- mih r1, 00000000
-        buffermem(5) <= "0000000010110100"; -- add r1, r0
+        buffermem(0) <= "0000000000000000"; -- nop
+        buffermem(1) <= "0000000010110100"; -- cwp
+        buffermem(2) <= "1111000001011101"; -- mil r0, 01011101
+        buffermem(3) <= "1111000100000101"; -- mih r0, 00000101
+        buffermem(4) <= "1111010000000001"; -- mil r1, 00000001
+        buffermem(5) <= "1111010100000000"; -- mih r1, 00000000
+        buffermem(6) <= "0000000010110100"; -- add r1, r0
 
         if ReadMem = '1' then
-            data_out <= buffermem(to_integer(unsigned(address)));
+            databus <= buffermem(to_integer(unsigned(address)));
             MemDataReady <= '1'; -- kys
         elsif WriteMem = '1' then
-            buffermem(to_integer(unsigned(address))) <= data_in;
+            buffermem(to_integer(unsigned(address))) <= databus;
         end if; 
     end process;
 end behavioral;
