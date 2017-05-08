@@ -3,7 +3,7 @@ use IEEE.std_logic_1164.all;
 
 entity addressingUnit is
     port (
-        clk, ResetPC, PCplusI, PCplus1, R0plusI, R0plus0, address_on_databus : in std_logic := '0';
+        clk, ResetPC, PCplusI, PCplus1, R0plusI, R0plus0 : in std_logic := '0';
         Rside   : in std_logic_vector (15 downto 0) := "0000000000000000";
         Iside   : in std_logic_vector (7 downto 0) := "00000000";
         Address : out std_logic_vector (15 downto 0)  := "0000000000000000";
@@ -28,17 +28,10 @@ architecture dataflow of addressingUnit is
     );
     end component;
 
-    signal PCout , addressSignal : std_logic_vector (15 downto 0) := "0000000000000000";
+    signal PCout , AddressSignal : std_logic_vector (15 downto 0) := "0000000000000000";
 
 begin
-    process( address_on_databus, AddressSignal )
-    begin
-        if address_on_databus = '1' then
-            Databus <= AddressSignal;
-        else
-            Address <= AddressSignal;
-        end if ;
-    end process;
+    Address <= AddressSignal;
 
     l1 : PC port map (
         clk      => clk,

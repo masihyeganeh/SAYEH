@@ -24,7 +24,7 @@ architecture rtl of datapath is
         Address : OUT std_logic_vector (15 DOWNTO 0);
 		Databus : OUT std_logic_vector (15 DOWNTO 0);
         clk, ResetPC, PCplusI, PCplus1 : IN std_logic;
-        R0plusI, R0plus0, address_on_databus : IN std_logic
+        R0plusI, R0plus0 : IN std_logic
     );
 	end component;
 
@@ -91,22 +91,21 @@ architecture rtl of datapath is
 	signal RSide : std_logic_vector (15 downto 0) := "0000000000000000";
 	signal ISide : std_logic_vector (7 DOWNTO 0) := "00000000";
 	signal registeraddr : std_logic_vector(3 downto 0) := "0000";
-	signal DatabusSignal : std_logic_vector (15 downto 0) := "0000000000000000";
+	signal AddressSignal, DatabusSignal : std_logic_vector (15 downto 0) := "0000000000000000";
 
 
 begin
     AU  : addressingUnit port map (
 	Rside => Rside,
 	Iside => Iside,
-	Address => Addressbus,
+	Address => AddressSignal,
 	Databus => DatabusSignal,
 	clk => clk,
 	ResetPC => ResetPC,
 	PCplusI => PCplusI,
 	PCplus1 => PCplus1,
 	R0plusI => R0plusI,
-	R0plus0 => R0plus0,
-	address_on_databus => address_on_databus
+	R0plus0 => R0plus0
 	);
 
 	AL  : alu port map (
@@ -137,12 +136,15 @@ begin
 		end if;
 	end process ;
 
-	process( ALUout_on_Databus, ALUout, DatabusSignal )
+	process( Address_on_Databus, ALUout_on_Databus, ALUout, AddressSignal, DatabusSignal )
 	begin
-		if ALUout_on_Databus = '1' then
+		if Address_on_Databus = '1' then
+            DatabusSignal <= AddressSignal;
+        elsif ALUout_on_Databus = '1' then
 			DatabusSignal <= ALUout;
 		end if;
 		Databus <= DatabusSignal;
+		AddressBus <= AddressSignal;
 	end process ;
 
 	RF  : registerFile port map (DatabusSignal, clk, registeraddr, WPout, RFLwrite, RFHwrite, Right, Left); 
