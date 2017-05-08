@@ -56,6 +56,31 @@ begin
 				next_state <= fetch;
 
 			when fetch =>
+				address_on_databus <= '0';
+				ALUout_on_Databus <= '0';
+				RFLwrite <= '0';
+				RFHwrite <= '0';
+				WPadd <= '0';
+				WPreset <= '0';
+				RS_on_AddresetUnitRSide <= '0';
+				RD_on_AddresetUnitRSide <= '0';
+				Shadow <= '0';
+				IR_on_LOpndBus <= '0';
+				RFright_on_OpndBus <= '0';
+				IR_on_HOpndBus <= '0';
+				B15to0 <= '0';
+				AandB <= '0';
+				AorB <= '0';
+				NotB <= '0';
+				AaddB <= '0';
+				AsubB <= '0';
+				AcmpB <= '0';
+				shrB <= '0';
+				shlB <= '0';
+				Cset <= '0';
+				Creset <= '0';
+				Zset <= '0';
+				ZReset <= '0';
 				next_state <= decode;
 				ReadMem <= '1';
 				WriteMem <= '0';
@@ -71,7 +96,7 @@ begin
 				has_immediate <= '0';
 
 				if shadow_select = '1' then
-					operation := IR (8 downto 5);
+					operation := IR (7 downto 4);
 				else
 					operation := IR (15 downto 12);
 				end if ;
