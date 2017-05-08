@@ -18,7 +18,7 @@ begin
     process( ReadMem, WriteMem, address )
     begin
         buffermem(0) <= "0000000000000000"; -- nop
-        buffermem(1) <= "0000000010110100"; -- cwp
+        buffermem(1) <= "0000000000000110"; -- cwp
         buffermem(2) <= "1111000001011101"; -- mil r0, 01011101
         buffermem(3) <= "1111000100000101"; -- mih r0, 00000101
         buffermem(4) <= "1111010000000001"; -- mil r1, 00000001
