@@ -158,10 +158,16 @@ begin
 					when "1111" => 
 						case ( IR (9 downto 8) ) is
 							when "00" =>
-								RFLwrite <= '1'; -- I should be on Databus
+								RFright_on_OpndBus <= '1';
+								IR_on_LOpndBus <= '1';
+								B15to0 <= '1';
+								RFLwrite <= '1';
 								has_immediate <= '1';
 							when "01" =>
-								RFHwrite <= '1'; -- I should be on Databus
+								RFright_on_OpndBus <= '1';
+								IR_on_HOpndBus <= '1';
+								B15to0 <= '1';
+								RFHwrite <= '1';
 								has_immediate <= '1';
 							when "10" =>
 								PCplusI <= '1';
@@ -171,7 +177,10 @@ begin
 								has_immediate <= '1';
 							when "11" =>
 								RD_on_AddresetUnitRSide <= '1';
-								PCplusI <= '1'; -- I should be on Databus
+								RFright_on_OpndBus <= '1';
+								IR_on_LOpndBus <= '1';
+								B15to0 <= '1';
+								PCplusI <= '1';
 								has_immediate <= '1';
 							when others =>
 						end case ;

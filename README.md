@@ -9,4 +9,4 @@ TODOs
 
 - [ ] Zin & Cin in ALU are not used
 - [ ] Implement effectiveAddress and writeBack states for controller
-- [ ] How could I (Immediate) be written on Databus?
+- [x] How could I (Immediate) be written on Databus?

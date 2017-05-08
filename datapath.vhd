@@ -95,6 +95,19 @@ architecture rtl of datapath is
 
 
 begin
+	process( IR_on_LOpndBus, IR_on_HOpndBus, RFright_on_OpndBus )
+	begin
+		if IR_on_LOpndBus = '1' then
+			OpndBus <= ("00000000" & IRout (7 downto 0));
+		elsif IR_on_HOpndBus = '1' then
+			OpndBus <= (IRout (15 downto 8) & "00000000");
+		end if ;
+
+		if RFright_on_OpndBus = '1' then
+			Right <= OpndBus;
+		end if ; 
+	end process ;
+
     AU  : addressingUnit port map (
 	Rside => Rside,
 	Iside => Iside,
