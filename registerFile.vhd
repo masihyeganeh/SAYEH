@@ -20,7 +20,6 @@ architecture behavioral of registerFile is
     type registerType is array (63 downto 0) of std_logic_vector(15 downto 0);
 
     signal registers : registerType;
-    signal tempReg   : std_logic_vector(15 downto 0) := "0000000000000000";
 
 begin
     registerFile : process (clk)
@@ -33,17 +32,13 @@ begin
             RS <= registers(Saddress);
             RD <= registers(Daddress);
 
-            tempReg <= registers(Daddress);
-
             if (RFLWrite = '1') then
-                tempReg (7 downto 0) <= input (7 downto 0);
+                registers(Daddress) <= registers(Daddress) (15 downto 8) &  input (7 downto 0);
             end if;
 
             if (RFHWrite = '1') then
-                tempReg (15 downto 8) <= input (15 downto 8);
+                registers(Daddress) <= input (15 downto 8) & registers(Daddress) (7 downto 0);
             end if;
-
-            registers(Daddress) <= tempReg; 
 
         end if;
         -- maybe there should be 2 processes one for clk one for the rest of ifs

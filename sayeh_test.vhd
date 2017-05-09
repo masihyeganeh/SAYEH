@@ -13,7 +13,8 @@ architecture behavioral of testsayeh is
          ExternalReset, MemDataReady : in std_logic := '1';
          ReadMem, WriteMem, ReadIO, WriteIO : out std_logic;
          Addressbus : out std_logic_vector (15 downto 0);
-         Databus : inout std_logic_vector (15 downto 0)
+         DatabusIn : in std_logic_vector (15 downto 0);
+         DatabusOut : out std_logic_vector (15 downto 0)
         );
     end component;
 
@@ -31,12 +32,20 @@ architecture behavioral of testsayeh is
         signal   ExternalReset :  std_logic;
         signal   ReadMem, WriteMem, ReadIO, WriteIO, MemDataReady :  std_logic;
         signal   Addressbus :  std_logic_vector (15 downto 0);
+        signal   DatabusIn :  std_logic_vector (15 downto 0);
+        signal   DatabusOut :  std_logic_vector (15 downto 0);
         signal   Databus :  std_logic_vector (15 downto 0);
-        signal   MemoryDatabus :  std_logic_vector (15 downto 0);
-        signal   SayehDatabus :  std_logic_vector (15 downto 0);
     
 
 begin
+    process( ReadMem, Databus )
+	begin
+		if ReadMem = '1' then
+			DatabusIn <= Databus;
+        else
+            DatabusIn <= DatabusOut;
+		end if;
+	end process ;
     mysayeh : sayeh port map (
          clk => clk,
          ExternalReset => ExternalReset,
@@ -46,28 +55,18 @@ begin
          WriteIO => WriteIO,
          MemDataReady => MemDataReady,
          Addressbus => Addressbus,
-         Databus => SayehDatabus
+         DatabusIn => DatabusIn,
+         DatabusOut => DatabusOut
     );
     mymemory : memory port map (
         address => Addressbus,
-        databus => MemoryDatabus,
+        databus => Databus,
         clk => clk,
         ReadMem => ReadMem,
         WriteMem => WriteMem,
         MemDataReady => MemDataReady
     );
     ExternalReset <= '0';
-
-    process( ReadMem, MemoryDatabus, SayehDatabus )
-	begin
-		if ReadMem = '1' then
-			Databus <= MemoryDatabus;
-            -- SayehDatabus <= Databus;
-		else
-			Databus <= SayehDatabus;
-            -- MemoryDatabus <= Databus;
-		end if;
-	end process ;
 
 process
     begin

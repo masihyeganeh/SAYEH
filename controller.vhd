@@ -11,7 +11,7 @@ entity controller is
 		RS_on_AddresetUnitRSide, RD_on_AddresetUnitRSide, -- addressLogic
 		IRload, Shadow, -- IR
 		IR_on_LOpndBus, RFright_on_OpndBus, IR_on_HOpndBus, -- OPndBus
-		B15to0, AandB, AorB, NotB, AaddB, AsubB, AcmpB, shrB, shlB, -- alu
+		B15downto0, AandB, AorB, NotB, AaddB, AsubB, AcmpB, shrB, shlB, -- alu
 		Cset, Creset, Zset, ZReset : out std_logic := '0';  --flags
 		IR : in std_logic_vector (15 downto 0);
 		clk, External_Reset, MemDataReady, Zin, Cin : in std_logic
@@ -42,7 +42,7 @@ begin
 	begin
 		case current_state is
 			when reset =>
-				B15to0       <= '0';
+				B15downto0   <= '0';
 				AandB        <= '0';
 				AorB         <= '0';
 				NotB         <= '0';
@@ -68,7 +68,7 @@ begin
 				IR_on_LOpndBus <= '0';
 				RFright_on_OpndBus <= '0';
 				IR_on_HOpndBus <= '0';
-				B15to0 <= '0';
+				B15downto0 <= '0';
 				AandB <= '0';
 				AorB <= '0';
 				NotB <= '0';
@@ -87,7 +87,7 @@ begin
 				IRload <= '1';
 				ResetPC <= '0';
 				PCplusI <= '0';
-				PCplus1 <= '1';
+				PCplus1 <= '0';
 				R0plusI <= '0';
 				R0plus0 <= '0';
 
@@ -103,7 +103,7 @@ begin
 
 				case ( operation ) is
 					when "0001" =>
-						B15to0 <= '1';
+						B15downto0 <= '1';
 						ALUout_on_Databus <= '1';
 						RFLwrite <= '1';
 						RFHwrite <= '1';
@@ -114,14 +114,14 @@ begin
 						RFHwrite <= '1';
 						ReadMem <= '1';
 					when "0011" =>
-						B15to0 <= '1';
+						B15downto0 <= '1';
 						ALUout_on_Databus <= '1';
 						RD_on_AddresetUnitRSide <= '1';
 						R0plus0 <= '1';
 						WriteMem <= '1';
 					when "0110" => AandB <= '1'; -- and
 					when "0111" => AorB  <= '1'; -- or
-					when "1000" => notB  <= '1'; -- not
+					when "1000" => NotB  <= '1'; -- not
 					when "1001" => shlB  <= '1'; -- shift left
 					when "1010" => shrB  <= '1'; -- shift right
 					when "1011" => AaddB <= '1'; -- addition
@@ -160,13 +160,13 @@ begin
 							when "00" =>
 								RFright_on_OpndBus <= '1';
 								IR_on_LOpndBus <= '1';
-								B15to0 <= '1';
+								B15downto0 <= '1';
 								RFLwrite <= '1';
 								has_immediate <= '1';
 							when "01" =>
 								RFright_on_OpndBus <= '1';
 								IR_on_HOpndBus <= '1';
-								B15to0 <= '1';
+								B15downto0 <= '1';
 								RFHwrite <= '1';
 								has_immediate <= '1';
 							when "10" =>
@@ -179,7 +179,7 @@ begin
 								RD_on_AddresetUnitRSide <= '1';
 								RFright_on_OpndBus <= '1';
 								IR_on_LOpndBus <= '1';
-								B15to0 <= '1';
+								B15downto0 <= '1';
 								PCplusI <= '1';
 								has_immediate <= '1';
 							when others =>
@@ -217,10 +217,12 @@ begin
 				if shadow_select = '0' and has_immediate = '0' then
 					next_state <= decode;
 					shadow_select <= '1';
+					Shadow <= '1';
 				else
+					PCplus1 <= '1';
 					shadow_select <= '0';
+					Shadow <= '0';
 				end if ;
-				Shadow <= shadow_select;
 
 			when halt =>
 				-- do nothing

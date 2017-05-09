@@ -7,7 +7,7 @@ entity addressingUnit is
         Rside   : in std_logic_vector (15 downto 0) := "0000000000000000";
         Iside   : in std_logic_vector (7 downto 0) := "00000000";
         Address : out std_logic_vector (15 downto 0)  := "0000000000000000";
-        Databus : out std_logic_vector (15 downto 0)  := "0000000000000000"
+        Databus : in std_logic_vector (15 downto 0)  := "0000000000000000"
     );
 end addressingUnit;
 

@@ -17,7 +17,7 @@ architecture behavioral of testcontroller is
 		RS_on_AddresetUnitRSide, RD_on_AddresetUnitRSide, -- addressLogic
 		IRload, Shadow, -- IR
 		IR_on_LOpndBus, RFright_on_OpndBus, IR_on_HOpndBus, -- OPndBus
-		B15to0, AandB, AorB, NotB, AaddB, AsubB, AcmpB, shrB, shlB, -- alu
+		B15downto0, AandB, AorB, NotB, AaddB, AsubB, AcmpB, shrB, shlB, -- alu
 		Cset, Creset, Zset, ZReset : out std_logic;  --flags
 		IR : in std_logic_vector (15 downto 0);
 		clk, External_Reset, MemDataReady, Zin, Cin : in std_logic
@@ -27,7 +27,7 @@ architecture behavioral of testcontroller is
     signal ReadMem, WriteMem, address_on_databus, ALUout_on_Databus, ResetPc,
     PCplus1, PCplusI, R0plusI, R0plus0, RFLwrite, RFHwrite, WPadd, WPreset,
     RS_on_AddresetUnitRSide, RD_on_AddresetUnitRSide, IRload, Shadow,
-    IR_on_LOpndBus, RFright_on_OpndBus, IR_on_HOpndBus, B15to0, AandB, AorB,
+    IR_on_LOpndBus, RFright_on_OpndBus, IR_on_HOpndBus, B15downto0, AandB, AorB,
     NotB, AaddB, AsubB, AcmpB, shrB, shlB, Cset, Creset, Zset, ZReset,
     External_Reset, MemDataReady, Zin, Cin, clk : std_logic := '0';
     signal IR : std_logic_vector (15 downto 0) := "0000000000000000";
@@ -55,7 +55,7 @@ begin
         IR_on_LOpndBus => IR_on_LOpndBus,
         RFright_on_OpndBus => RFright_on_OpndBus,
         IR_on_HOpndBus => IR_on_HOpndBus,
-        B15to0 => B15to0,
+        B15downto0 => B15downto0,
         AandB => AandB,
         AorB => AorB,
         NotB => NotB,
